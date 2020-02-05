@@ -40,11 +40,16 @@ typedef struct {
 
 
 typedef struct display_region{
-	display_data* data_source;
+	void* data;
 	uint16_t posx, posy;
 	uint16_t width, height;
-	void (*handler)(struct display_region*);
+	void (*handler)(struct display_region*, void*);
 }display_region;
+
+typedef struct{
+	uint8_t amount_regions;
+	display_region* regions;
+}display_page;
 
 
 #endif

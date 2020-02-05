@@ -57,7 +57,7 @@ void display_fill_rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, 
 	display_write_data(y & 0xFF);//Y address set
 	display_write_command(D_CMD_RAMWR);
 	
-	for(int i = 240*320; i > 0; i--){
+	for(int i = width*height; i > 0; i--){
 		display_write_data(color);
 	}
 }

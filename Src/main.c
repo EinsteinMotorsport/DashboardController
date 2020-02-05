@@ -24,6 +24,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "display_driver.h"
+#include "display_layout.h"
 
 /* USER CODE END Includes */
 
@@ -109,7 +110,7 @@ int main(void)
 	
 
 	display_init();
-
+	display_layout_init(0,0);
 
   /* USER CODE END 2 */
 
@@ -125,11 +126,25 @@ int main(void)
 		//HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_5);
 		
 		
+		display_layout_next_page(DISPLAY_ID_LEFT);
+		
+		//HAL_Delay(5000);
+		/*
 		display_fill(0x0000);
+		
+		HAL_Delay(5000);
+		
+		display_layout_init(0,0);
+		
+		HAL_Delay(5000);
+		*/
+		//display_select(DISPLAY_ID_LEFT);
+		
+		//display_fill(0x0000);
 		//display_print_string("Einstein Motorsport -- AL20 Dashboard",20,2,1,0xFFFF,0x0000);
-		display_print_string("Jonas",20,22,4,0xFFE0,0x0000);
-		display_print_string("Coesfeld",20,82,2,0xFFE0,0x0000);
-		display_print_string("0,73 m",20,142,4,0xFFE0,0x0000);
+		//display_print_string("Jonas",20,22,4,WHITE,0x0000);
+		//display_print_string("Coesfeld",20,82,3,WHITE,0x0000);
+		//display_print_string("0,73 m",20,142,4,WHITE,0x0000);
 		//display_print_string("73 cm",20,82,4,0xFFFF,0x0000);
 		//display_print_string("Einstein Motorsport",20,102,1,0xFFFF,0x0000);
 		//display_print_string("Einstein Motorsport",20,122,1,0xFFFF,0x0000);
@@ -141,10 +156,10 @@ int main(void)
 		
 		HAL_Delay(50000);
 		
-		display_fill(0xFFE0);
-		HAL_Delay(500);
-		display_fill(0x001F);
-		HAL_Delay(500);		
+		//display_fill(0xFFE0);
+		//HAL_Delay(500);
+		//display_fill(0x001F);
+		//HAL_Delay(500);		
 		
     /* USER CODE END WHILE */
 

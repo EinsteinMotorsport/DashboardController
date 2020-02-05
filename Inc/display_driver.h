@@ -32,17 +32,17 @@ typedef enum {
 
 
 typedef enum {
-	D_CMD_RASET   = 0x2B,
-	D_CMD_CASET   = 0x2A,
-	D_CMD_RAMWR   = 0x2C,
 	D_CMD_SLPOUT  = 0x11,
-	D_CMD_COLMOD  = 0x3A,
-	D_CMD_MADCTL  = 0x36,
+	D_CMD_NORON   = 0x13,
 	D_CMD_INVOFF  = 0x20,
 	D_CMD_INVON   = 0x21,
-	D_CMD_NORON   = 0x13,
-	D_CMD_DISPON  = 0x29,
 	D_CMD_DISPOFF = 0x28,
+	D_CMD_DISPON  = 0x29,
+	D_CMD_CASET   = 0x2A,
+	D_CMD_RASET   = 0x2B,
+	D_CMD_RAMWR   = 0x2C,
+	D_CMD_MADCTL  = 0x36,
+	D_CMD_COLMOD  = 0x3A,
 	
 }DISPLAY_COMMAND;
 
