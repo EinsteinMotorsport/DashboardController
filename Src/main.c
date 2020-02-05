@@ -140,7 +140,7 @@ int main(void)
 		*/
 		//display_select(DISPLAY_ID_LEFT);
 		
-		//display_fill(0x0000);
+		//display_fill(BLACK);
 		//display_print_string("Einstein Motorsport -- AL20 Dashboard",20,2,1,0xFFFF,0x0000);
 		//display_print_string("Jonas",20,22,4,WHITE,0x0000);
 		//display_print_string("Coesfeld",20,82,3,WHITE,0x0000);

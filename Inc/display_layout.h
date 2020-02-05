@@ -4,6 +4,7 @@
 #include "stm32f4xx_hal.h"
 #include "display_driver.h"
 
+
 void display_layout_init(int left_page, int right_page);
 void display_redraw_layout(void);
 void display_update_layout(void);
@@ -16,6 +17,11 @@ enum VALUE_TYPE{
 	VALUE_TYPE_USHORT,
 	VALUE_TYPE_SCHAR,
 	VALUE_TYPE_SSHORT,	
+};
+
+enum LAYOUT_FLAGS{
+	LAYOUT_FLAG_REDRAW = 0x01,
+	LAYOUT_FLAG_HIGHLIGHTED = 0x02,
 };
 
 
@@ -43,7 +49,7 @@ typedef struct display_region{
 	void* data;
 	uint16_t posx, posy;
 	uint16_t width, height;
-	void (*handler)(struct display_region*, void*);
+	void (*handler)(struct display_region*, void*, uint16_t);
 }display_region;
 
 typedef struct{
