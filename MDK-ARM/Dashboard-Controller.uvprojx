@@ -412,6 +412,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\display_driver.c</FilePath>
             </File>
+            <File>
+              <FileName>display_layout.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\display_layout.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

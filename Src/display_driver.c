@@ -10,6 +10,8 @@
 
 static int inverted = 0;
 
+
+
 void display_invert(int a){
 	display_write_command(a ? D_CMD_INVON : D_CMD_INVOFF);
 	inverted = a;
@@ -38,24 +40,32 @@ void display_write_data(uint16_t data){
 }
 
 
-void display_fill(uint16_t color){
-	
-	display_write_command(D_CMD_RASET);
-	display_write_data(0x0000);
-	display_write_data(0x0000);
-	display_write_data(0x0000);
-	display_write_data(0x00EF);//X address set
+
+void display_fill_rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t color){
 	display_write_command(D_CMD_CASET);
-	display_write_data(0x0000);
-	display_write_data(0x0000);
-	display_write_data(0x0001);
-	display_write_data(0x003F);//Y address set
-	
+	display_write_data(x >> 8);
+	display_write_data(x & 0xFF);//X address set
+	x += width - 1;
+	display_write_data(x >> 8);
+	display_write_data(x & 0xFF);//X address set
+
+	display_write_command(D_CMD_RASET);
+	display_write_data(y >> 8);
+	display_write_data(y & 0xFF);//Y address set
+	y += height - 1;
+	display_write_data(y >> 8);
+	display_write_data(y & 0xFF);//Y address set
 	display_write_command(D_CMD_RAMWR);
+	
 	for(int i = 240*320; i > 0; i--){
 		display_write_data(color);
 	}
 }
+
+void display_fill(uint16_t color){
+	display_fill_rect(0,0,320,240,color);
+}
+
 
 
 
