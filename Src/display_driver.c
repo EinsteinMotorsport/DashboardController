@@ -2,8 +2,10 @@
 #include "display_driver.h"
 #include "stm32f4xx_hal.h"
 
-#define FONT_WIDTH 10
-#define FONT_HEIGHT 16
+#ifndef FONT_WIDTH
+#define FONT_WIDTH (10)
+#define FONT_HEIGHT (16)
+#endif
 #include "font/10x16_horizontal_LSB_1.h"
 
 

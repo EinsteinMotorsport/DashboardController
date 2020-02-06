@@ -1,6 +1,7 @@
 #include "display_layout.h"
 //#include "display_layout_renderer.h"
 
+#include <stdio.h>
 
 #define SCALING_FACTOR (3)
 #define NUMBER_CHARS (7)
@@ -11,12 +12,21 @@ typedef struct{
 	uint16_t highlight_color;
 }color_fill_data;
 
+typedef struct{
+	char* str;
+	float value;
+	int scale;
+	uint16_t text_color;
+	uint16_t background_color;
+	uint16_t highlighted_text_color;
+}text_renderer_data;
 
 
 
 extern void color_fill_renderer(struct display_region* region, void* data, uint16_t flags);
+extern void text_renderer(struct display_region* region, void* data, uint16_t flags);
 
-
+text_renderer_data test_5 = {"Tmot %f",1.0,3,YELLOW,RED,GREEN};
 color_fill_data test_0 = {PINK,   BLUE};
 color_fill_data test_1 = {CYAN,   BLUE};
 color_fill_data test_2 = {YELLOW, BLUE};
@@ -25,7 +35,8 @@ color_fill_data test_4 = {RED,    BLUE};
 
 
 static display_page page1 = {5,(display_region[]){
-														{&test_4, 0, 0, NUMBER_CHARS*(SCALING_FACTOR+ 2)*10, (SCALING_FACTOR+2)*16, color_fill_renderer},
+//														{&test_4, 0, 0, NUMBER_CHARS*(SCALING_FACTOR+ 2)*10, (SCALING_FACTOR+2)*16, color_fill_renderer},
+														{&test_5, 0, 0, NUMBER_CHARS*(SCALING_FACTOR+ 2)*10, (SCALING_FACTOR+2)*16, text_renderer},
 														{&test_1, 5, 240 - 3*SCALING_FACTOR*16 - 10, NUMBER_CHARS*SCALING_FACTOR*10, SCALING_FACTOR*16, color_fill_renderer},
 														{&test_2, 5, 240 - 2*SCALING_FACTOR*16 - 5, NUMBER_CHARS*SCALING_FACTOR*10, SCALING_FACTOR*16, color_fill_renderer},
 														{&test_3, 5, 240 - 1*SCALING_FACTOR*16, NUMBER_CHARS*SCALING_FACTOR*10, SCALING_FACTOR*16, color_fill_renderer},
@@ -115,4 +126,25 @@ void color_fill_renderer(struct display_region* region, void* data, uint16_t fla
 		display_fill_rect(region->posx,region->posy,region->width, region->height, (flags & LAYOUT_FLAG_HIGHLIGHTED) ? _data->highlight_color : _data->color);
 	}
 }
+
+void text_renderer(struct display_region* region, void* data, uint16_t flags){
+	text_renderer_data* _data = data;
+	int chars = region->width / (FONT_WIDTH * _data->scale);
+	int rows = region->height / (FONT_HEIGHT * _data->scale);
+//	int i = 0;
+	char* tmp;
+	int k = snprintf(tmp ,chars * rows,_data->str, _data->value);
+	int index = 0;
+	for (int j = 0; j<rows;j++){
+		for (int i = 0; i<chars;i++){
+			if (index++ < k) display_print_char(tmp[index],
+																					region->posx + i*FONT_WIDTH*_data->scale,
+																					region->posy + j*FONT_HEIGHT*_data->scale,
+																					_data->scale,flags & LAYOUT_FLAG_HIGHLIGHTED ? _data->highlighted_text_color :_data->text_color,
+																					_data->background_color);
+		}
+	}
+}
+
+
 

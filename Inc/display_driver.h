@@ -5,6 +5,11 @@
 
 #include "main.h"
 
+#ifndef FONT_WIDTH
+#define FONT_WIDTH (10)
+#define FONT_HEIGHT (16)
+#endif
+
 
 #define COLORMAP(c) (((c & 0xF80000) >> 8) | ((c & 0xFC00) >> 5) | ((c & 0xF8) >> 3))
 
