@@ -59,6 +59,7 @@ void display_select(DISPLAY_ID);
 void display_init(void);
 void display_fill_rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t color);
 void display_fill(uint16_t);
+void display_print_n_string(char* str, uint16_t xpos, uint16_t ypos, int scale, uint16_t text_color, uint16_t background_color, int n);
 void display_print_string(char* str, uint16_t xpos, uint16_t ypos, int scale, uint16_t text_color, uint16_t background_color);
 void display_print_char(char chr, uint16_t xpos, uint16_t ypos, int scale, uint16_t text_color, uint16_t background_color);
 

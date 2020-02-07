@@ -129,6 +129,19 @@ void display_print_string(char* str, uint16_t xpos, uint16_t ypos, int scale, ui
 	}
 }
 
+void display_print_n_string(char* str, uint16_t xpos, uint16_t ypos, int scale, uint16_t text_color, uint16_t background_color, int n){
+	char _str[n+1];
+	int i=0;
+	while (str[i] && i<n){
+		_str[i] = str[i];
+		i++;
+	}
+	while (i < n)_str[i++] = 0x20;
+	_str[n] = 0;
+	display_print_string(_str,xpos,ypos,scale,text_color,background_color);
+}
+
+
 void display_init(){	
 	display_select(DISPLAY_ID_ALL);
 	GPIOE->BSRR = ((uint32_t)(DisplayRW_Pin | DisplayRST_Pin) << 16 | (uint32_t)DisplayRD_Pin);

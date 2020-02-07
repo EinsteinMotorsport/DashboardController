@@ -154,7 +154,7 @@ int main(void)
 		//display_print_string("Einstein Motorsport",20,202,1,0xFFFF,0x0000);
 		//display_print_string("Einstein Motorsport",20,222,1,0xFFFF,0x0000);
 		
-		HAL_Delay(50000);
+		HAL_Delay(10000);
 		
 		//display_fill(0xFFE0);
 		//HAL_Delay(500);
@@ -163,7 +163,6 @@ int main(void)
 		
     /* USER CODE END WHILE */
 
-		
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
