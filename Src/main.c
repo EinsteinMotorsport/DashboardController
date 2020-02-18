@@ -25,6 +25,9 @@
 /* USER CODE BEGIN Includes */
 #include "display_driver.h"
 #include "display_layout.h"
+#include "can_data_provider.h"
+#include "display_renderer.h"
+#include <stdlib.h>
 
 /* USER CODE END Includes */
 
@@ -35,6 +38,9 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
+display_page** generate_left_pages(void);
+display_page** generate_right_pages(void);
 
 
 /* USER CODE END PD */
@@ -110,7 +116,14 @@ int main(void)
 	
 
 	display_init();
-	display_layout_init(0,0);
+	can_data_init(&hcan2);
+	
+	display_page** left = generate_left_pages();
+	display_page** right = generate_right_pages();
+	
+	
+	
+	display_layout_init(left,right,1,2);
 
   /* USER CODE END 2 */
 
@@ -126,40 +139,11 @@ int main(void)
 		//HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_5);
 		
 		
-		display_layout_next_page(DISPLAY_ID_LEFT);
+		HAL_Delay(1000);
 		
-		//HAL_Delay(5000);
-		/*
-		display_fill(0x0000);
+		can_data_update();
+		display_update_layout(DISPLAY_ID_ALL);
 		
-		HAL_Delay(5000);
-		
-		display_layout_init(0,0);
-		
-		HAL_Delay(5000);
-		*/
-		//display_select(DISPLAY_ID_LEFT);
-		
-		//display_fill(BLACK);
-		//display_print_string("Einstein Motorsport -- AL20 Dashboard",20,2,1,0xFFFF,0x0000);
-		//display_print_string("Jonas",20,22,4,WHITE,0x0000);
-		//display_print_string("Coesfeld",20,82,3,WHITE,0x0000);
-		//display_print_string("0,73 m",20,142,4,WHITE,0x0000);
-		//display_print_string("73 cm",20,82,4,0xFFFF,0x0000);
-		//display_print_string("Einstein Motorsport",20,102,1,0xFFFF,0x0000);
-		//display_print_string("Einstein Motorsport",20,122,1,0xFFFF,0x0000);
-		//display_print_string("Einstein Motorsport",20,142,1,0xFFFF,0x0000);
-		//display_print_string("Einstein Motorsport",20,162,1,0xFFFF,0x0000);
-		//display_print_string("Einstein Motorsport",20,182,1,0xFFFF,0x0000);
-		//display_print_string("Einstein Motorsport",20,202,1,0xFFFF,0x0000);
-		//display_print_string("Einstein Motorsport",20,222,1,0xFFFF,0x0000);
-		
-		HAL_Delay(10000);
-		
-		//display_fill(0xFFE0);
-		//HAL_Delay(500);
-		//display_fill(0x001F);
-		//HAL_Delay(500);		
 		
     /* USER CODE END WHILE */
 
@@ -425,6 +409,69 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
+
+
+can_value test_data = {89.350f,1};
+text_renderer_data test_5 = {"Tmot%.1f",&test_data,3,WHITE,BLACK,GREEN};
+color_fill_data test_0 = {PINK,   BLUE};
+color_fill_data test_1 = {CYAN,   BLUE};
+color_fill_data test_2 = {YELLOW, BLUE};
+color_fill_data test_3 = {GREEN,  BLUE};
+color_fill_data test_4 = {RED,    BLUE};
+
+display_page** generate_left_pages(){
+
+	const int number_pages = 1;
+	
+	display_region* page0 = malloc(sizeof(display_region) * 5);
+	if(!page0) Error_Handler();
+	page0[0] = (display_region){&test_5, 0, 0, 320, 80, text_renderer};
+	page0[1] = (display_region){&test_1, 5, 240 - 3*3*16 - 10, 7*3*10, 3*16, color_fill_renderer};
+	page0[2] = (display_region){&test_2, 5, 240 - 2*3*16 - 5, 7*3*10, 3*16, color_fill_renderer};
+	page0[3] = (display_region){&test_3, 5, 240 - 1*3*16, 7*3*10, 3*16, color_fill_renderer};
+	page0[4] = (display_region){&test_2, 220,80,100,160,color_fill_renderer};
+
+	display_page* pages = malloc(sizeof(display_page) * number_pages);		
+	if (!pages) Error_Handler();
+	pages[0] = (display_page){5,page0};	
+	
+	display_page** ret = malloc(sizeof(void*) * number_pages);
+	if (!ret) Error_Handler();
+	ret[0] = pages;
+	return ret;
+}
+
+
+
+display_page** generate_right_pages(){
+
+	const int number_pages = 2;
+	
+	display_region* page0 = malloc(sizeof(display_region) * 5);
+	if(!page0) Error_Handler();
+	page0[0] = (display_region){&test_5, 0, 0, 320, 80, text_renderer};
+	page0[1] = (display_region){&test_1, 5, 240 - 3*3*16 - 10, 7*3*10, 3*16, color_fill_renderer};
+	page0[2] = (display_region){&test_2, 5, 240 - 2*3*16 - 5, 7*3*10, 3*16, color_fill_renderer};
+	page0[3] = (display_region){&test_3, 5, 240 - 1*3*16, 7*3*10, 3*16, color_fill_renderer};
+	page0[4] = (display_region){&test_2, 220,80,100,160,color_fill_renderer};
+
+	display_region* page1 = malloc(sizeof(display_region) * 1);
+	if(!page1) Error_Handler();
+	page1[0] = (display_region){&test_4,0,0,320,240,color_fill_renderer};
+	
+	display_page* pages = malloc(sizeof(display_page) * number_pages);		
+	if (!pages) Error_Handler();
+	pages[0] = (display_page){5,page0};	
+	pages[1] = (display_page){1,page1};
+	
+	display_page** ret = malloc(sizeof(void*) * number_pages);
+	if (!ret) Error_Handler();
+	ret[0] = pages;
+	ret[1] = pages + 1;
+	
+	return ret;
+
+}
 
 
 
