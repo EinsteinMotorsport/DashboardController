@@ -51,6 +51,7 @@ display_page** generate_right_pages(void);
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+CAN_HandleTypeDef hcan1;
 CAN_HandleTypeDef hcan2;
 
 I2C_HandleTypeDef hi2c1;
@@ -70,6 +71,7 @@ static void MX_CAN2_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_SPI3_Init(void);
 static void MX_USART3_UART_Init(void);
+static void MX_CAN1_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -112,6 +114,7 @@ int main(void)
   MX_I2C1_Init();
   MX_SPI3_Init();
   MX_USART3_UART_Init();
+  MX_CAN1_Init();
   /* USER CODE BEGIN 2 */
 	
 
@@ -126,6 +129,8 @@ int main(void)
 	display_layout_init(left,right,1,2);
 
   /* USER CODE END 2 */
+ 
+ 
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -188,6 +193,43 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief CAN1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_CAN1_Init(void)
+{
+
+  /* USER CODE BEGIN CAN1_Init 0 */
+
+  /* USER CODE END CAN1_Init 0 */
+
+  /* USER CODE BEGIN CAN1_Init 1 */
+
+  /* USER CODE END CAN1_Init 1 */
+  hcan1.Instance = CAN1;
+  hcan1.Init.Prescaler = 16;
+  hcan1.Init.Mode = CAN_MODE_NORMAL;
+  hcan1.Init.SyncJumpWidth = CAN_SJW_1TQ;
+  hcan1.Init.TimeSeg1 = CAN_BS1_1TQ;
+  hcan1.Init.TimeSeg2 = CAN_BS2_1TQ;
+  hcan1.Init.TimeTriggeredMode = DISABLE;
+  hcan1.Init.AutoBusOff = DISABLE;
+  hcan1.Init.AutoWakeUp = DISABLE;
+  hcan1.Init.AutoRetransmission = DISABLE;
+  hcan1.Init.ReceiveFifoLocked = DISABLE;
+  hcan1.Init.TransmitFifoPriority = DISABLE;
+  if (HAL_CAN_Init(&hcan1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN CAN1_Init 2 */
+
+  /* USER CODE END CAN1_Init 2 */
+
 }
 
 /**
@@ -411,8 +453,8 @@ static void MX_GPIO_Init(void)
 
 
 
-can_value test_data = {89.350f,1};
-text_renderer_data test_5 = {"Tmot%.1f",&test_data,3,WHITE,BLACK,GREEN};
+
+text_renderer_data test_5 = {"Tmot%.1f",0,3,WHITE,BLACK,GREEN};
 color_fill_data test_0 = {PINK,   BLUE};
 color_fill_data test_1 = {CYAN,   BLUE};
 color_fill_data test_2 = {YELLOW, BLUE};
@@ -420,7 +462,9 @@ color_fill_data test_3 = {GREEN,  BLUE};
 color_fill_data test_4 = {RED,    BLUE};
 
 display_page** generate_left_pages(){
-
+	
+	test_5.can_value = can_data_get_value(TMOT);
+	
 	const int number_pages = 1;
 	
 	display_region* page0 = malloc(sizeof(display_region) * 5);
