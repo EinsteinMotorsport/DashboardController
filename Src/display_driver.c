@@ -23,7 +23,7 @@ void display_toggle_invert(void){
 	display_invert(!inverted);
 }
 
-void display_write_command(DISPLAY_COMMAND command){
+inline void display_write_command(DISPLAY_COMMAND command){
 	GPIOE->BSRR = (uint32_t)(DisplayC_D_Pin | DisplayRW_Pin) << 16  | (uint32_t)DisplayRD_Pin;
 	GPIOD->BSRR = ((uint32_t) ~(command & 0xFF)) << 16 | (uint32_t)(command & 0xFF);	
 //	HAL_Delay(1);
@@ -32,7 +32,7 @@ void display_write_command(DISPLAY_COMMAND command){
 }
 
 
-void display_write_data(uint16_t data){
+inline void display_write_data(uint16_t data){
 	
 	GPIOE->BSRR = (uint32_t)(DisplayRW_Pin) << 16  | (uint32_t)(DisplayRD_Pin | DisplayC_D_Pin);
 	GPIOD->BSRR = ((uint32_t)~data) << 16 | (uint32_t)data;
@@ -71,7 +71,7 @@ void display_fill(uint16_t color){
 
 
 
-void display_select(DISPLAY_ID displayID){
+inline void display_select(DISPLAY_ID displayID){
 	if (displayID & DISPLAY_ID_LEFT) {
 		GPIOE->BSRR = DisplayCS1_Pin << 16;
 	}else {

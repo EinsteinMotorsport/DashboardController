@@ -6,15 +6,15 @@
 #define NUMBER_CAN_VALUES (8)
 
 typedef enum {
-	TMOT     = 0x0,
-	TMOT2    = 0x1,
-	TFUEL    = 0x2,
-	TOIL     = 0x3,
-	TECU_SYS = 0x4,
-	UB       = 0x5,
-	B_ENGON  = 0x6,
+	TMOT     = 0x00,
+	TMOT2    = 0x01,
+	TFUEL    = 0x02,
+	TOIL     = 0x03,
+	TECU_SYS = 0x04,
+	UB       = 0x05,
+	B_ENGON  = 0x06,
 	
-	PBRAKE_F = 0x7,
+	PBRAKE_F = 0x07,
 	/* ... */
 }CAN_VALUE_ID;
 

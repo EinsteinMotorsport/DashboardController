@@ -119,7 +119,7 @@ int main(void)
 	
 
 	display_init();
-	can_data_init(&hcan2);
+	can_data_init(&hcan1);
 	
 	display_page** left = generate_left_pages();
 	display_page** right = generate_right_pages();

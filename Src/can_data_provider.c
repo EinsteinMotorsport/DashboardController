@@ -4,7 +4,7 @@
 static can_value* values; 
 
 static void can_data_handle_10(uint8_t* data);
-/*static void can_data_handle_11(uint8_t* data);
+static void can_data_handle_11(uint8_t* data);
 static void can_data_handle_12(uint8_t* data);
 static void can_data_handle_13(uint8_t* data);
 static void can_data_handle_14(uint8_t* data);
@@ -14,7 +14,7 @@ static void can_data_handle_17(uint8_t* data);
 static void can_data_handle_18(uint8_t* data);
 static void can_data_handle_19(uint8_t* data);
 static void can_data_handle_20(uint8_t* data);
-*/
+
 
 
 static CAN_HandleTypeDef* hcan;
@@ -108,7 +108,27 @@ static void can_data_handle_10(uint8_t* data){
 	if (values[TOIL].value     !=(tmp = ((float)data[3]) - 40.0f))  values[TOIL].value     = tmp, values[TOIL].did_change     = 1;
 	if (values[TECU_SYS].value !=(tmp = ((float)data[4]) - 40.0f))  values[TECU_SYS].value = tmp, values[TECU_SYS].did_change = 1;
 	if (values[UB].value       !=(tmp = ((float)data[5]) * 0.001f)) values[UB].value       = tmp, values[UB].did_change       = 1;
-	if (values[B_ENGON].value  !=(tmp = (float)data[6]))           values[B_ENGON].value  = tmp, values[B_ENGON].did_change  = 1;
+	if (values[B_ENGON].value  !=(tmp =  (float)data[6]))           values[B_ENGON].value  = tmp, values[B_ENGON].did_change  = 1;
+}
+static void can_data_handle_11(uint8_t* data){
+}
+static void can_data_handle_12(uint8_t* data){
+}
+static void can_data_handle_13(uint8_t* data){
+}
+static void can_data_handle_14(uint8_t* data){
+}
+static void can_data_handle_15(uint8_t* data){
+}
+static void can_data_handle_16(uint8_t* data){
+}
+static void can_data_handle_17(uint8_t* data){
+}
+static void can_data_handle_18(uint8_t* data){
+}
+static void can_data_handle_19(uint8_t* data){
+}
+static void can_data_handle_20(uint8_t* data){
 }
 
 

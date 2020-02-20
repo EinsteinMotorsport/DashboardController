@@ -1,5 +1,3 @@
-
-
 #ifndef DISPLAY_DRIVER_H
 #define DISPLAY_DRIVER_H
 
@@ -53,9 +51,9 @@ typedef enum {
 
 
 
-void display_write_command(DISPLAY_COMMAND);
-void display_write_data(uint16_t);
-void display_select(DISPLAY_ID);
+extern void display_write_command(DISPLAY_COMMAND);
+extern void display_write_data(uint16_t);
+extern void display_select(DISPLAY_ID);
 void display_init(void);
 void display_fill_rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t color);
 void display_fill(uint16_t);
