@@ -134,16 +134,14 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9);
 	
-	
+	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_9,GPIO_PIN_RESET);
 	
   while (1){
 		
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9);
+		
 		//HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_5);
 		
-		
-		HAL_Delay(1000);
-		
+				
 		can_data_update();
 		display_update_layout(DISPLAY_ID_ALL);
 		
@@ -209,22 +207,51 @@ static void MX_CAN1_Init(void)
 
   /* USER CODE END CAN1_Init 1 */
   hcan1.Instance = CAN1;
-  hcan1.Init.Prescaler = 16;
+  hcan1.Init.Prescaler = 4;
   hcan1.Init.Mode = CAN_MODE_NORMAL;
   hcan1.Init.SyncJumpWidth = CAN_SJW_1TQ;
-  hcan1.Init.TimeSeg1 = CAN_BS1_1TQ;
-  hcan1.Init.TimeSeg2 = CAN_BS2_1TQ;
+  hcan1.Init.TimeSeg1 = CAN_BS1_3TQ;
+  hcan1.Init.TimeSeg2 = CAN_BS2_4TQ;
   hcan1.Init.TimeTriggeredMode = DISABLE;
-  hcan1.Init.AutoBusOff = DISABLE;
-  hcan1.Init.AutoWakeUp = DISABLE;
-  hcan1.Init.AutoRetransmission = DISABLE;
+  hcan1.Init.AutoBusOff = ENABLE;
+  hcan1.Init.AutoWakeUp = ENABLE;
+  hcan1.Init.AutoRetransmission = ENABLE;
   hcan1.Init.ReceiveFifoLocked = DISABLE;
-  hcan1.Init.TransmitFifoPriority = DISABLE;
+  hcan1.Init.TransmitFifoPriority = ENABLE;
   if (HAL_CAN_Init(&hcan1) != HAL_OK)
   {
     Error_Handler();
   }
   /* USER CODE BEGIN CAN1_Init 2 */
+	//set interrupt mode for receiving new can data byte into rxfifo0
+	//SET_BIT(hcan1.Instance->IER, CAN_IER_FMPIE0);
+	
+	CAN_FilterTypeDef sFilterConfig;
+	
+	//Configure CAN filter
+	sFilterConfig.FilterBank = 0;
+  sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
+  sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
+  sFilterConfig.FilterIdHigh = 0x0000;
+  sFilterConfig.FilterIdLow = 0x0000;
+  sFilterConfig.FilterMaskIdHigh = 0x0000;
+  sFilterConfig.FilterMaskIdLow = 0x0000;
+  sFilterConfig.FilterFIFOAssignment = CAN_RX_FIFO0;
+  sFilterConfig.FilterActivation = ENABLE;
+  sFilterConfig.SlaveStartFilterBank = 14;
+  
+  if(HAL_CAN_ConfigFilter(&hcan1, &sFilterConfig) != HAL_OK)
+  {
+    /* Filter configuration Error */
+    Error_Handler();
+  }
+	
+	//Start CAN peripheral
+	
+	if(HAL_CAN_Start(&hcan1) != HAL_OK)
+	{
+		Error_Handler();
+	}
 
   /* USER CODE END CAN1_Init 2 */
 
@@ -441,7 +468,7 @@ static void MX_GPIO_Init(void)
                           |DataBus0_Pin|DataBus1_Pin|DataBus2_Pin|DataBus3_Pin 
                           |DataBus4_Pin|DataBus5_Pin|DataBus6_Pin|DataBus7_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
@@ -453,6 +480,10 @@ static void MX_GPIO_Init(void)
 
 
 text_renderer_data test_5 = {"Tmot%3.0f",0,4,WHITE,BLACK,GREEN};
+text_renderer_data test_6 = {"oil%3.0f",0,2,WHITE,BLACK,GREEN};
+text_renderer_data test_7 = {"rpm%5.0f",0,2,WHITE,BLACK,GREEN};
+text_renderer_data test_8 = {"speed%3.0f",0,2,WHITE,BLACK,GREEN};
+text_renderer_data test_9 = {"%1.0f",0,10,WHITE,BLACK,GREEN};
 color_fill_data test_0 = {PINK,   BLUE};
 color_fill_data test_1 = {CYAN,   BLUE};
 color_fill_data test_2 = {YELLOW, BLUE};
@@ -462,16 +493,20 @@ color_fill_data test_4 = {RED,    BLUE};
 display_page** generate_left_pages(){
 	
 	test_5.can_value = can_data_get_value(TMOT);
+	test_6.can_value = can_data_get_value(TOIL);
+	test_7.can_value = can_data_get_value(NMOT);
+	test_8.can_value = can_data_get_value(SPEED);
+	test_9.can_value = can_data_get_value(GEAR);
 	
 	const int number_pages = 1;
 	
 	display_region* page0 = malloc(sizeof(display_region) * 5);
 	if(!page0) Error_Handler();
 	page0[0] = (display_region){&test_5, 0, 0, 320, 80, text_renderer};
-	page0[1] = (display_region){&test_1, 5, 240 - 3*3*16 - 10, 7*3*10, 3*16, color_fill_renderer};
-	page0[2] = (display_region){&test_2, 5, 240 - 2*3*16 - 5, 7*3*10, 3*16, color_fill_renderer};
-	page0[3] = (display_region){&test_3, 5, 240 - 1*3*16, 7*3*10, 3*16, color_fill_renderer};
-	page0[4] = (display_region){&test_2, 220,80,100,160,color_fill_renderer};
+	page0[1] = (display_region){&test_6, 5, 240 - 3*3*16 - 10, 7*3*10, 3*16, text_renderer};
+	page0[2] = (display_region){&test_7, 5, 240 - 2*3*16 - 5, 7*3*10, 3*16, text_renderer};
+	page0[3] = (display_region){&test_8, 5, 240 - 1*3*16, 7*3*10, 3*16, text_renderer};
+	page0[4] = (display_region){&test_9, 220,80,100,160,text_renderer};
 
 	display_page* pages = malloc(sizeof(display_page) * number_pages);		
 	if (!pages) Error_Handler();
