@@ -129,8 +129,6 @@ int main(void)
 	display_layout_init(left,right,1,2);
 
   /* USER CODE END 2 */
- 
- 
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */

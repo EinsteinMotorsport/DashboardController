@@ -30,10 +30,10 @@ static inline void update(int id, float val){
 
 
 void can_data_update(){
-	
+	/*
 	values[TMOT].value++;
 	values[TMOT].did_change = 1;
-	
+	*/
 	//HAL_CAN_GetRxFifoFillLevel liest die Anzahl an Nachrichten aus, die im CAN-Eingangspuffer CAN_RX_FIFO0 gespeichert sind und speichert sie in numberCanMessages ab
 		uint32_t numberCanMessages = HAL_CAN_GetRxFifoFillLevel(hcan, CAN_RX_FIFO0);
 		CAN_RxHeaderTypeDef rxHeader;
