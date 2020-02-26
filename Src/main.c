@@ -126,7 +126,7 @@ int main(void)
 	
 	
 	
-	display_layout_init(left,right,1,2);
+	display_layout_init(left,right,1,4);
 
   /* USER CODE END 2 */
 
@@ -135,10 +135,12 @@ int main(void)
 	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9);
 	
 	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_9,GPIO_PIN_RESET);
-	
+	unsigned int i = 0;
   while (1){
-		
-		
+		if (i++>100000) {
+			i=0;
+			display_layout_next_page(DISPLAY_ID_RIGHT);
+		}
 		//HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_5);
 		
 				
@@ -479,7 +481,7 @@ static void MX_GPIO_Init(void)
 
 
 
-text_renderer_data test_5 = {"RPM%3.0f",0,5,WHITE,BLACK,GREEN};
+text_renderer_data test_5 = {"%04.0f",0,5,WHITE,BLACK,GREEN};
 text_renderer_data test_6 = {"TMOT%3.0f",0,3,WHITE,BLACK,GREEN};
 text_renderer_data test_7 = {"TOIL%3.0f",0,3,WHITE,BLACK,GREEN};
 text_renderer_data test_8 = {"POIL%3.0f",0,3,WHITE,BLACK,GREEN};
@@ -520,23 +522,23 @@ display_page** generate_left_pages(){
 
 text_renderer_data rp0l0 = {"speed %5.0f km/h",0,2,BLACK,YELLOW,GREEN};
 text_renderer_data rp0l1 = {"Tmot2 %5.0f \u00f8C",0,2,WHITE,RED,GREEN};
-text_renderer_data rp0l2 = {"Tfuel %5.0f \u00f8C",0,2,WHITE,BLACK,GREEN};
-text_renderer_data rp0l3 = {"Pfuel   %2.1f bar",0,2,BLACK,YELLOW,GREEN};
+text_renderer_data rp0l2 = {"Tfuel %5.0f \u00f8C",0,2,BLACK,YELLOW,GREEN};
+text_renderer_data rp0l3 = {"Pfuel   %2.1f bar",0,2,WHITE,BLACK,GREEN};
 
-text_renderer_data rp1l0 = {"fuel_con%5.0f",0,3,WHITE,BLACK,GREEN};
-text_renderer_data rp1l1 = {"ub%5.0f V",0,3,WHITE,BLACK,GREEN};
-text_renderer_data rp1l2 = {"aps%5.0f",0,3,WHITE,BLACK,GREEN};
-text_renderer_data rp1l3 = {"ath%5.0f",0,3,WHITE,BLACK,GREEN};
+text_renderer_data rp1l0 = {"fuel_con%5.0f",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp1l1 = {"ub%5.0f V",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp1l2 = {"aps%5.0f",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp1l3 = {"ath%5.0f",0,2,WHITE,BLACK,GREEN};
 
-text_renderer_data rp2l0 = {"launchsw%5.0f",0,3,WHITE,BLACK,GREEN};
-text_renderer_data rp2l1 = {"lambda%5.0f",0,3,WHITE,BLACK,GREEN};
-text_renderer_data rp2l2 = {"%5.0f",0,3,WHITE,BLACK,GREEN};
-text_renderer_data rp2l3 = {"flc%5.0f",0,3,WHITE,BLACK,GREEN};
+text_renderer_data rp2l0 = {"launchsw%5.0f",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp2l1 = {"lambda%5.0f",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp2l2 = {"%5.0f",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp2l3 = {"flc%5.0f",0,2,WHITE,BLACK,GREEN};
 
-text_renderer_data rp3l0 = {"TC-sw%5.0f",0,3,WHITE,BLACK,GREEN};
-text_renderer_data rp3l1 = {"pclutch%5.0f bar",0,3,WHITE,BLACK,GREEN};
-text_renderer_data rp3l2 = {"steer%5.0f",0,3,WHITE,BLACK,GREEN};
-text_renderer_data rp3l3 = {"fan_pwm%5.0f",0,3,WHITE,BLACK,GREEN};
+text_renderer_data rp3l0 = {"TC-sw%5.0f",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp3l1 = {"pclutch%5.0f bar",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp3l2 = {"steer%5.0f",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp3l3 = {"fan_pwm%5.0f",0,2,WHITE,BLACK,GREEN};
 
 display_page** generate_right_pages(){
 	
@@ -563,31 +565,31 @@ display_page** generate_right_pages(){
 	
 	display_region* page0 = malloc(sizeof(display_region) * 4);
 	if(!page0) Error_Handler();
-	page0[0] = (display_region){&rp0l0, 0, 6, 320, 60, text_renderer};
-	page0[1] = (display_region){&rp0l1, 0, 66, 320, 60, text_renderer};
-	page0[2] = (display_region){&rp0l2, 0, 126, 320, 60, text_renderer};
-	page0[3] = (display_region){&rp0l3, 0, 186, 320, 60, text_renderer};
+	page0[0] = (display_region){&rp0l0, 0, 0, 320, 60, text_renderer};
+	page0[1] = (display_region){&rp0l1, 0, 60, 320, 60, text_renderer};
+	page0[2] = (display_region){&rp0l2, 0, 120, 320, 60, text_renderer};
+	page0[3] = (display_region){&rp0l3, 0, 180, 320, 60, text_renderer};
 
 	display_region* page1 = malloc(sizeof(display_region) * 4);
 	if(!page0) Error_Handler();
-	page0[0] = (display_region){&rp0l0, 0, 6, 320, 60, text_renderer};
-	page0[1] = (display_region){&rp0l1, 0, 66, 320, 60, text_renderer};
-	page0[2] = (display_region){&rp0l2, 0, 126, 320, 60, text_renderer};
-	page0[3] = (display_region){&rp0l3, 0, 186, 320, 60, text_renderer};
+	page1[0] = (display_region){&rp1l0, 0, 0, 320, 60, text_renderer};
+	page1[1] = (display_region){&rp1l1, 0, 60, 320, 60, text_renderer};
+	page1[2] = (display_region){&rp1l2, 0, 120, 320, 60, text_renderer};
+	page1[3] = (display_region){&rp1l3, 0, 180, 320, 60, text_renderer};
 	
 	display_region* page2 = malloc(sizeof(display_region) * 4);
 	if(!page0) Error_Handler();
-	page0[0] = (display_region){&rp0l0, 0, 6, 320, 60, text_renderer};
-	page0[1] = (display_region){&rp0l1, 0, 66, 320, 60, text_renderer};
-	page0[2] = (display_region){&rp0l2, 0, 126, 320, 60, text_renderer};
-	page0[3] = (display_region){&rp0l3, 0, 186, 320, 60, text_renderer};
+	page2[0] = (display_region){&rp2l0, 0, 0, 320, 60, text_renderer};
+	page2[1] = (display_region){&rp2l1, 0, 60, 320, 60, text_renderer};
+	page2[2] = (display_region){&rp2l2, 0, 120, 320, 60, text_renderer};
+	page2[3] = (display_region){&rp2l3, 0, 180, 320, 60, text_renderer};
 	
 	display_region* page3 = malloc(sizeof(display_region) * 4);
 	if(!page0) Error_Handler();
-	page0[0] = (display_region){&rp0l0, 0, 6, 320, 60, text_renderer};
-	page0[1] = (display_region){&rp0l1, 0, 66, 320, 60, text_renderer};
-	page0[2] = (display_region){&rp0l2, 0, 126, 320, 60, text_renderer};
-	page0[3] = (display_region){&rp0l3, 0, 186, 320, 60, text_renderer};
+	page3[0] = (display_region){&rp3l0, 0, 0, 320, 60, text_renderer};
+	page3[1] = (display_region){&rp3l1, 0, 60, 320, 60, text_renderer};
+	page3[2] = (display_region){&rp3l2, 0, 120, 320, 60, text_renderer};
+	page3[3] = (display_region){&rp3l3, 0, 180, 320, 60, text_renderer};
 
 	
 	display_page* pages = malloc(sizeof(display_page) * number_pages);		
