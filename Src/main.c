@@ -454,7 +454,7 @@ static void MX_GPIO_Init(void)
 
 
 
-text_renderer_data test_5 = {"Tmot%.1f",0,3,WHITE,BLACK,GREEN};
+text_renderer_data test_5 = {"Tmot%3.0f",0,4,WHITE,BLACK,GREEN};
 color_fill_data test_0 = {PINK,   BLUE};
 color_fill_data test_1 = {CYAN,   BLUE};
 color_fill_data test_2 = {YELLOW, BLUE};

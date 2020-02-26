@@ -26,6 +26,9 @@ void can_data_init(CAN_HandleTypeDef* _hcan){
 
 void can_data_update(){
 	
+	values[TMOT].value++;
+	values[TMOT].did_change = 1;
+	
 	//HAL_CAN_GetRxFifoFillLevel liest die Anzahl an Nachrichten aus, die im CAN-Eingangspuffer CAN_RX_FIFO0 gespeichert sind und speichert sie in numberCanMessages ab
 		uint32_t numberCanMessages = HAL_CAN_GetRxFifoFillLevel(hcan, CAN_RX_FIFO0);
 		CAN_RxHeaderTypeDef rxHeader;
@@ -44,7 +47,7 @@ void can_data_update(){
 					case 0x10:
 						can_data_handle_10(can_data);
 						break;
-/*					case 0x11:
+					case 0x11:
 						can_data_handle_11(can_data);
 						break;
 					case 0x12:
@@ -73,7 +76,7 @@ void can_data_update(){
 						break;
 					case 0x20:
 						can_data_handle_20(can_data);
-						break;*/
+						break;
 				}
 				/*
 				//Die eintreffenden CAN-Nachrichten werden nach ihrem Identifier gefiltert. Soll die ID an das Funkmodul weitergeleitet werden, liefert das if true.
