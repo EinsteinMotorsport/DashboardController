@@ -153,8 +153,16 @@ void display_init(){
 	display_write_command(D_CMD_COLMOD);
 	display_write_data(0x55);
 	HAL_Delay(10);
+	
+	display_select(DISPLAY_ID_LEFT);
 	display_write_command(D_CMD_MADCTL);
 	display_write_data(0xA0);
+	
+	display_select(DISPLAY_ID_RIGHT);
+	display_write_command(D_CMD_MADCTL);
+	display_write_data(0x60);
+	
+	display_select(DISPLAY_ID_ALL);
 	
 	display_write_command(D_CMD_RASET);
 	display_write_data(0x0000);

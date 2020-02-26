@@ -10,6 +10,7 @@ void text_renderer(uint16_t x,uint16_t y,uint16_t w,uint16_t h, void* data, uint
 
 		int chars = (w) / (FONT_WIDTH * _data->scale);
 		int rows =  h / (FONT_HEIGHT * _data->scale);
+		display_fill_rect(x,rows*FONT_HEIGHT+y,w,h-rows*FONT_HEIGHT,_data->background_color);
 		char tmp[chars*rows + 1];
 		int a = snprintf(tmp,chars*rows + 1,_data->str,_data->can_value->value);
 		//char* tmp = _data->str;

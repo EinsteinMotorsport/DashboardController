@@ -479,10 +479,10 @@ static void MX_GPIO_Init(void)
 
 
 
-text_renderer_data test_5 = {"Tmot%3.0f",0,4,WHITE,BLACK,GREEN};
-text_renderer_data test_6 = {"oil%3.0f",0,2,WHITE,BLACK,GREEN};
-text_renderer_data test_7 = {"rpm%5.0f",0,2,WHITE,BLACK,GREEN};
-text_renderer_data test_8 = {"speed%3.0f",0,2,WHITE,BLACK,GREEN};
+text_renderer_data test_5 = {"RPM%3.0f",0,5,WHITE,BLACK,GREEN};
+text_renderer_data test_6 = {"TMOT%3.0f",0,3,WHITE,BLACK,GREEN};
+text_renderer_data test_7 = {"TOIL%3.0f",0,3,WHITE,BLACK,GREEN};
+text_renderer_data test_8 = {"POIL%3.0f",0,3,WHITE,BLACK,GREEN};
 text_renderer_data test_9 = {"%1.0f",0,10,WHITE,BLACK,GREEN};
 color_fill_data test_0 = {PINK,   BLUE};
 color_fill_data test_1 = {CYAN,   BLUE};
@@ -492,10 +492,10 @@ color_fill_data test_4 = {RED,    BLUE};
 
 display_page** generate_left_pages(){
 	
-	test_5.can_value = can_data_get_value(TMOT);
-	test_6.can_value = can_data_get_value(TOIL);
-	test_7.can_value = can_data_get_value(NMOT);
-	test_8.can_value = can_data_get_value(SPEED);
+	test_5.can_value = can_data_get_value(NMOT);
+	test_6.can_value = can_data_get_value(TMOT);
+	test_7.can_value = can_data_get_value(TOIL);
+	test_8.can_value = can_data_get_value(POIL);
 	test_9.can_value = can_data_get_value(GEAR);
 	
 	const int number_pages = 1;
@@ -518,34 +518,93 @@ display_page** generate_left_pages(){
 	return ret;
 }
 
+text_renderer_data rp0l0 = {"speed %5.0f km/h",0,2,BLACK,YELLOW,GREEN};
+text_renderer_data rp0l1 = {"Tmot2 %5.0f \u00f8C",0,2,WHITE,RED,GREEN};
+text_renderer_data rp0l2 = {"Tfuel %5.0f \u00f8C",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp0l3 = {"Pfuel   %2.1f bar",0,2,BLACK,YELLOW,GREEN};
 
+text_renderer_data rp1l0 = {"fuel_con%5.0f",0,3,WHITE,BLACK,GREEN};
+text_renderer_data rp1l1 = {"ub%5.0f V",0,3,WHITE,BLACK,GREEN};
+text_renderer_data rp1l2 = {"aps%5.0f",0,3,WHITE,BLACK,GREEN};
+text_renderer_data rp1l3 = {"ath%5.0f",0,3,WHITE,BLACK,GREEN};
+
+text_renderer_data rp2l0 = {"launchsw%5.0f",0,3,WHITE,BLACK,GREEN};
+text_renderer_data rp2l1 = {"lambda%5.0f",0,3,WHITE,BLACK,GREEN};
+text_renderer_data rp2l2 = {"%5.0f",0,3,WHITE,BLACK,GREEN};
+text_renderer_data rp2l3 = {"flc%5.0f",0,3,WHITE,BLACK,GREEN};
+
+text_renderer_data rp3l0 = {"TC-sw%5.0f",0,3,WHITE,BLACK,GREEN};
+text_renderer_data rp3l1 = {"pclutch%5.0f bar",0,3,WHITE,BLACK,GREEN};
+text_renderer_data rp3l2 = {"steer%5.0f",0,3,WHITE,BLACK,GREEN};
+text_renderer_data rp3l3 = {"fan_pwm%5.0f",0,3,WHITE,BLACK,GREEN};
 
 display_page** generate_right_pages(){
-
-	const int number_pages = 2;
 	
-	display_region* page0 = malloc(sizeof(display_region) * 5);
-	if(!page0) Error_Handler();
-	page0[0] = (display_region){&test_5, 0, 0, 320, 80, text_renderer};
-	page0[1] = (display_region){&test_1, 5, 240 - 3*3*16 - 10, 7*3*10, 3*16, color_fill_renderer};
-	page0[2] = (display_region){&test_2, 5, 240 - 2*3*16 - 5, 7*3*10, 3*16, color_fill_renderer};
-	page0[3] = (display_region){&test_3, 5, 240 - 1*3*16, 7*3*10, 3*16, color_fill_renderer};
-	page0[4] = (display_region){&test_2, 220,80,100,160,color_fill_renderer};
+	rp0l0.can_value = can_data_get_value(SPEED);
+	rp0l1.can_value = can_data_get_value(TMOT2);
+	rp0l2.can_value = can_data_get_value(TFUEL);
+	rp0l3.can_value = can_data_get_value(PFUEL);
+	rp1l0.can_value = can_data_get_value(FUELCONS);
+	rp1l1.can_value = can_data_get_value(UB);
+	rp1l2.can_value = can_data_get_value(APS);
+	rp1l3.can_value = can_data_get_value(ATH);
+	rp2l0.can_value = can_data_get_value(B_LAUNCHSW);
+	rp2l1.can_value = can_data_get_value(LAMBDA);
+	rp2l2.can_value = can_data_get_value(NMOT); //TODO Handschrift von Jonas entziffern.
+	rp2l3.can_value = can_data_get_value(FLC);
+	rp3l0.can_value = can_data_get_value(SPEED);//TODO Handschrift von Jonas entziffern.
+	rp3l1.can_value = can_data_get_value(PCLUTCH);
+	rp3l2.can_value = can_data_get_value(STEER);
+	rp3l3.can_value = can_data_get_value(FAN_PWM_EMS);
+	
+	
 
-	display_region* page1 = malloc(sizeof(display_region) * 1);
-	if(!page1) Error_Handler();
-	page1[0] = (display_region){&test_4,0,0,320,240,color_fill_renderer};
+	const int number_pages = 4;
+	
+	display_region* page0 = malloc(sizeof(display_region) * 4);
+	if(!page0) Error_Handler();
+	page0[0] = (display_region){&rp0l0, 0, 6, 320, 60, text_renderer};
+	page0[1] = (display_region){&rp0l1, 0, 66, 320, 60, text_renderer};
+	page0[2] = (display_region){&rp0l2, 0, 126, 320, 60, text_renderer};
+	page0[3] = (display_region){&rp0l3, 0, 186, 320, 60, text_renderer};
+
+	display_region* page1 = malloc(sizeof(display_region) * 4);
+	if(!page0) Error_Handler();
+	page0[0] = (display_region){&rp0l0, 0, 6, 320, 60, text_renderer};
+	page0[1] = (display_region){&rp0l1, 0, 66, 320, 60, text_renderer};
+	page0[2] = (display_region){&rp0l2, 0, 126, 320, 60, text_renderer};
+	page0[3] = (display_region){&rp0l3, 0, 186, 320, 60, text_renderer};
+	
+	display_region* page2 = malloc(sizeof(display_region) * 4);
+	if(!page0) Error_Handler();
+	page0[0] = (display_region){&rp0l0, 0, 6, 320, 60, text_renderer};
+	page0[1] = (display_region){&rp0l1, 0, 66, 320, 60, text_renderer};
+	page0[2] = (display_region){&rp0l2, 0, 126, 320, 60, text_renderer};
+	page0[3] = (display_region){&rp0l3, 0, 186, 320, 60, text_renderer};
+	
+	display_region* page3 = malloc(sizeof(display_region) * 4);
+	if(!page0) Error_Handler();
+	page0[0] = (display_region){&rp0l0, 0, 6, 320, 60, text_renderer};
+	page0[1] = (display_region){&rp0l1, 0, 66, 320, 60, text_renderer};
+	page0[2] = (display_region){&rp0l2, 0, 126, 320, 60, text_renderer};
+	page0[3] = (display_region){&rp0l3, 0, 186, 320, 60, text_renderer};
+
 	
 	display_page* pages = malloc(sizeof(display_page) * number_pages);		
 	if (!pages) Error_Handler();
-	pages[0] = (display_page){5,page0};	
-	pages[1] = (display_page){1,page1};
+	pages[0] = (display_page){4,page0};	
+	pages[1] = (display_page){4,page1};
+	pages[2] = (display_page){4,page2};
+	pages[3] = (display_page){4,page3};
+	
 	
 	display_page** ret = malloc(sizeof(void*) * number_pages);
 	if (!ret) Error_Handler();
 	ret[0] = pages;
 	ret[1] = pages + 1;
-	
+	ret[2] = pages + 2;
+	ret[3] = pages + 3;
+
 	return ret;
 
 }
