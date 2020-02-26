@@ -24,6 +24,11 @@ void can_data_init(CAN_HandleTypeDef* _hcan){
 	values = malloc(sizeof(can_value) * NUMBER_CAN_VALUES);
 }
 
+static inline void update(int id, float val){
+	if (values[id].value != val) values[id].value = val, values[id].did_change = 1;
+}
+
+
 void can_data_update(){
 	
 	values[TMOT].value++;
@@ -104,34 +109,106 @@ can_value* can_data_get_value(CAN_VALUE_ID id){
 }
 
 static void can_data_handle_10(uint8_t* data){
-	float tmp;
-	if (values[TMOT].value     !=(tmp = ((float)data[0]) - 40.0f))  values[TMOT].value     = tmp, values[TMOT].did_change     = 1;
-	if (values[TMOT2].value    !=(tmp = ((float)data[1]) - 40.0f))  values[TMOT2].value    = tmp, values[TMOT2].did_change    = 1;
-	if (values[TFUEL].value    !=(tmp = ((float)data[2]) - 40.0f))  values[TFUEL].value    = tmp, values[TFUEL].did_change    = 1;
-	if (values[TOIL].value     !=(tmp = ((float)data[3]) - 40.0f))  values[TOIL].value     = tmp, values[TOIL].did_change     = 1;
-	if (values[TECU_SYS].value !=(tmp = ((float)data[4]) - 40.0f))  values[TECU_SYS].value = tmp, values[TECU_SYS].did_change = 1;
-	if (values[UB].value       !=(tmp = ((float)data[5]) * 0.001f)) values[UB].value       = tmp, values[UB].did_change       = 1;
-	if (values[B_ENGON].value  !=(tmp =  (float)data[6]))           values[B_ENGON].value  = tmp, values[B_ENGON].did_change  = 1;
+	update(TMOT,((float)data[0]) - 40.0f);
+	update(TMOT2,((float)data[1]) - 40.0f);
+	update(TFUEL,((float)data[2]) - 40.0f);
+	update(TOIL,((float)data[3]) - 40.0f);
+	update(TECU_SYS,((float)data[4]) - 40.0f);
+	update(UB,((float)data[5]) * 0.001f);
+	update(B_ENGON,(float)data[6]);
 }
+
 static void can_data_handle_11(uint8_t* data){
+	float tmp = ((float)(((uint16_t)data[0]) << 8 | data[1])) * 0.005f;
+	update(PBRAKE_F,tmp);
+	tmp = ((float)(((uint16_t)data[2]) << 8 | data[3])) * 0.005f;
+	update(PBRAKE_R,tmp);
+  tmp = ((float)(((uint16_t)data[4]) << 8 | data[5])) * 0.005f;
+	update(PCLUTCH,tmp);
+	update(PFUEL,((float)data[6])*0.05f);
+	update(POIL,((float)data[7])*0.05f);
 }
+
 static void can_data_handle_12(uint8_t* data){
+	float tmp = ((float)(((uint16_t)data[0]) << 8 | data[1])) * 0.01f;
+	update(ATH, tmp);
+	tmp = ((float)(((uint16_t)data[2]) << 8 | data[3])) * 0.01f;
+	update(APS, tmp);
+	tmp = ((float)(((uint16_t)data[4]) << 8 | data[5]));
+	update(CUTOFF_GC_EMS, tmp);
+	update(GEAR, (float)data[6]);
+	update(FAN_PWM_EMS, (float)data[7]);
 }
+
 static void can_data_handle_13(uint8_t* data){
+	float tmp = (float)(((double)*((uint32_t*)data)) * 0.01);
+	update(FUELCONS, tmp);
+	tmp = (float)(((double)*(((uint32_t*)data))+1) * 0.001);
+	update(DISTTRIP, tmp);
 }
+
 static void can_data_handle_14(uint8_t* data){
+	update(DAM_FL, ((float)(((uint16_t)data[0]) << 8 | data[1])) * 0.02f);
+	update(DAM_FR, ((float)(((uint16_t)data[2]) << 8 | data[3])) * 0.02f);
+	update(DAM_RR, ((float)(((uint16_t)data[4]) << 8 | data[5])) * 0.02f);
+	update(DAM_RL, ((float)(((uint16_t)data[6]) << 8 | data[7])) * 0.02f);
 }
+
 static void can_data_handle_15(uint8_t* data){
+	update(ACCY,((float)(((uint16_t)data[0]) << 8 | data[1])) * 0.001f);
+	update(STEER,((float)(((uint16_t)data[2]) << 8 | data[3])) * 0.01f);
+	update(SPEED,((float)(((uint16_t)data[4]) << 8 | data[5])) * 0.01f);
+	update(ACCX,((float)(((uint16_t)data[6]) << 8 | data[7])) * 0.001f);
 }
+
 static void can_data_handle_16(uint8_t* data){
+	update(NMOT,((float)(((uint16_t)data[0]) << 8 | data[1])));
+	update(LAMBDA,((float)(((uint16_t)data[2]) << 8 | data[3])) * 0.01f);
+	update(FLC, ((float)data[4])*0.005f + 72.0f);
+	update(B_LSUOP,((float)data[5]));
+	update(GEAR, (float)data[6]);
+	update(TMOT,((float)data[7]) - 40.0f);
 }
+
 static void can_data_handle_17(uint8_t* data){
+	//nmot
+	update(NMOT,((float)(((uint16_t)data[0]) << 8 | data[1])));
+	update(B_LAUNCHSW,(float)data[2]);
+	//launchsw
+	update(B_AUTOSHIFTSW,(float)data[3]);
+	//autoshift
+	update(B_CLUTCH_OPEN,(float)data[4]);
+	//clutchopen
+	update(B_UPSHEVENT_EMS,(float)data[5]);
+	//upshev
+	update(MI_LAUNCH,((float)data[6])*0.5f);
+	//mi_launch
+	update(GEAR, (float)data[7]);
+	//gear
 }
+
 static void can_data_handle_18(uint8_t* data){
+//vwheel
+	update(VWHEEL_FL,((float)(((uint16_t)data[0]) << 8 | data[1])) * 0.01f);
+	update(VWHEEL_FR,((float)(((uint16_t)data[2]) << 8 | data[3])) * 0.01f);
+	update(VWHEEL_RL,((float)(((uint16_t)data[4]) << 8 | data[5])) * 0.01f);
+	update(VWHEEL_RR,((float)(((uint16_t)data[6]) << 8 | data[7])) * 0.01f);
 }
+
 static void can_data_handle_19(uint8_t* data){
+	update(SPEED,((float)(((uint16_t)data[0]) << 8 | data[1])) * 0.01f);
+	update(SLIP_ACT,((float)(((uint16_t)data[2])<<8| data[3])) * 0.1f);
+	update(GC_STATE_EMS, (float) data[4]);
+	update(MI_LAUNCH,((float)data[5])*0.5f);
+	update(XXXXX,((float)data[6]));
 }
+
 static void can_data_handle_20(uint8_t* data){
+	update(UPSHIFTERRCNT, (float)(((uint16_t)data[0]) << 8 | data[1]));
+	update(DNSHIFTERRCNT, (float)(((uint16_t)data[2]) << 8 | data[3]));
+	update(SHIFTUP_PWM_EMS,((float)data[4]));
+	update(SHIFTDN_PWM_EMS,((float)data[5]));
+	update(DNSHIFTERRCNT, ((float)(((uint16_t)data[6]) << 8 | data[7])) * 0.001f);
 }
 
 
