@@ -42,7 +42,7 @@
 
 display_page** generate_left_pages(void);
 display_page** generate_right_pages(void);
-
+void rpm_update(can_value* data);
 
 /* USER CODE END PD */
 
@@ -126,9 +126,11 @@ int main(void)
 	display_page** left = generate_left_pages();
 	display_page** right = generate_right_pages();
 	
-	
-	
 	display_layout_init(left,right,1,4);
+
+
+	can_value* can_value_rpm = can_data_get_value(NMOT);
+
 
   /* USER CODE END 2 */
 
@@ -148,7 +150,7 @@ int main(void)
 				
 		can_data_update();
 		display_update_layout(DISPLAY_ID_ALL);
-		
+		rpm_update(can_value_rpm);
 		
     /* USER CODE END WHILE */
 
@@ -640,6 +642,27 @@ display_page** generate_right_pages(){
 
 	return ret;
 
+}
+
+void rpm_update(can_value* data){
+	if (data->flags & 1){
+		uint32_t leds = 0;
+		if (data->value >  450.0f) leds |= TOP_LED_2;
+		if (data->value > 2900.0f) leds |= TOP_LED_3;
+		if (data->value > 5000.0f) leds |= TOP_LED_4;
+		if (data->value > 5500.0f) leds |= TOP_LED_5;
+		if (data->value > 6000.0f) leds |= TOP_LED_6;
+		if (data->value > 6500.0f) leds |= TOP_LED_7;
+		if (data->value > 7000.0f) leds |= TOP_LED_8;
+		if (data->value > 7300.0f) leds |= TOP_LED_9;
+		if (data->value > 7600.0f) leds |= TOP_LED_10;
+		if (data->value > 7900.0f) leds |= TOP_LED_11;
+		if (data->value > 8200.0f) leds |= TOP_LED_12;
+		if (data->value > 8500.0f) leds |= TOP_LED_13;
+		uint8_t flags = LED_UPDATE | LED_ON;
+		if (data->value > 8500.0f) flags |= LED_BLINKING;
+		led_set(leds,flags); 
+	}
 }
 
 
