@@ -58,7 +58,7 @@
 #define	TOP_LED_14       (0x00004000)
 #define	TOP_LED_15       (0x00008000)
 	
-#define	RPM_LEDS         (TOP_LED_2 | TOP_LED_3 | TOP_LED_4 | TOP_LED_5 | TOP_LED_6 | TOP_LED_7 | TOP_LED_8 | TOP_LED_9 | TOP_LED_10 | TOP_LED_11 | TOP_LED_12 | TOP_LED_13,
+#define	RPM_LEDS         (TOP_LED_2 | TOP_LED_3 | TOP_LED_4 | TOP_LED_5 | TOP_LED_6 | TOP_LED_7 | TOP_LED_8 | TOP_LED_9 | TOP_LED_10 | TOP_LED_11 | TOP_LED_12 | TOP_LED_13)
 
 
 typedef enum{
