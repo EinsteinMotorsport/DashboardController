@@ -19,10 +19,10 @@ void display_layout_prev_page(DISPLAY_ID);
 	VALUE_TYPE_SSHORT,	
 };*/
 
-enum LAYOUT_FLAGS{
+typedef enum {
 	LAYOUT_FLAG_REDRAW = 0x01,
 	LAYOUT_FLAG_HIGHLIGHTED = 0x02,
-};
+}LAYOUT_FLAGS;
 
 
 typedef union {
@@ -49,7 +49,7 @@ typedef struct display_region{
 	void* data;
 	uint16_t posx, posy;
 	uint16_t width, height;
-	void (*handler)(uint16_t x,uint16_t y,uint16_t w,uint16_t h, void*, uint16_t);
+	uint8_t (*handler)(uint16_t x,uint16_t y,uint16_t w,uint16_t h, void*, uint16_t);
 }display_region;
 
 typedef struct{

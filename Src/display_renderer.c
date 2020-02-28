@@ -3,7 +3,7 @@
 #include "display_renderer.h"
 #include <stdio.h>
 
-void text_renderer(uint16_t x,uint16_t y,uint16_t w,uint16_t h, void* data, uint16_t flags){
+uint8_t text_renderer(uint16_t x,uint16_t y,uint16_t w,uint16_t h, void* data, uint16_t flags){
 	text_renderer_data* _data = data;
 
 	if (flags & 0x1 || _data->can_value->did_change){
@@ -19,12 +19,14 @@ void text_renderer(uint16_t x,uint16_t y,uint16_t w,uint16_t h, void* data, uint
 		}
 		_data->can_value->did_change = 0;
 	}
+	return 0;
 }
 
 
-void color_fill_renderer(uint16_t x,uint16_t y,uint16_t w,uint16_t h, void* data, uint16_t flags){
+uint8_t color_fill_renderer(uint16_t x,uint16_t y,uint16_t w,uint16_t h, void* data, uint16_t flags){
 	if (flags & 0x1){
 		color_fill_data* _data = (color_fill_data*) data;
 		display_fill_rect(x,y,w,h, (flags & 0x2) ? _data->highlight_color : _data->color);
 	}
+	return 0;
 }

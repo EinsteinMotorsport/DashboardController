@@ -137,7 +137,7 @@ int main(void)
 	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_9,GPIO_PIN_RESET);
 	unsigned int i = 0;
   while (1){
-		if (i++>100000) {
+		if (i++>100000 && 0) {
 			i=0;
 			display_layout_next_page(DISPLAY_ID_RIGHT);
 		}
@@ -412,10 +412,10 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOE_CLK_ENABLE();
+  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
-  __HAL_RCC_GPIOC_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, SideLED2_Pin|SideLED3_Pin|SideLED4_Pin|SideLED5_Pin 
@@ -424,10 +424,14 @@ static void MX_GPIO_Init(void)
                           |SideLED0_Pin|SideLED1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, TopLED0_Pin|TopLED1_Pin|TopLED2_Pin|TopLED3_Pin 
+  HAL_GPIO_WritePin(GPIOC, RGBLED0G_Pin|RGBLED1G_Pin|RGBLED2G_Pin|RGBLED3G_Pin 
+                          |RGBLED0B_Pin|RGBLED1B_Pin|RGBLED2B_Pin|RGBLED3B_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, RGBLED0R_Pin|RGBLED1R_Pin|TopLED2_Pin|TopLED3_Pin 
                           |TopLED4_Pin|TopLED5_Pin|TopLED6_Pin|TopLED7_Pin 
                           |TopLED8_Pin|TopLED9_Pin|TopLEDA_Pin|TopLEDB_Pin 
-                          |TopLEDC_Pin|TopLEDD_Pin|TopLEDE_Pin|TopLEDF_Pin, GPIO_PIN_RESET);
+                          |TopLEDC_Pin|TopLEDD_Pin|RGBLED2R_Pin|RGBLED3R_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, DataBus8_Pin|DataBus9_Pin|DataBusA_Pin|DataBusB_Pin 
@@ -448,18 +452,33 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : TopLED0_Pin TopLED1_Pin TopLED2_Pin TopLED3_Pin 
+  /*Configure GPIO pins : RGBLED0G_Pin RGBLED1G_Pin RGBLED2G_Pin RGBLED3G_Pin 
+                           RGBLED0B_Pin RGBLED1B_Pin RGBLED2B_Pin RGBLED3B_Pin */
+  GPIO_InitStruct.Pin = RGBLED0G_Pin|RGBLED1G_Pin|RGBLED2G_Pin|RGBLED3G_Pin 
+                          |RGBLED0B_Pin|RGBLED1B_Pin|RGBLED2B_Pin|RGBLED3B_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : RGBLED0R_Pin RGBLED1R_Pin TopLED2_Pin TopLED3_Pin 
                            TopLED4_Pin TopLED5_Pin TopLED6_Pin TopLED7_Pin 
                            TopLED8_Pin TopLED9_Pin TopLEDA_Pin TopLEDB_Pin 
-                           TopLEDC_Pin TopLEDD_Pin TopLEDE_Pin TopLEDF_Pin */
-  GPIO_InitStruct.Pin = TopLED0_Pin|TopLED1_Pin|TopLED2_Pin|TopLED3_Pin 
+                           TopLEDC_Pin TopLEDD_Pin RGBLED2R_Pin RGBLED3R_Pin */
+  GPIO_InitStruct.Pin = RGBLED0R_Pin|RGBLED1R_Pin|TopLED2_Pin|TopLED3_Pin 
                           |TopLED4_Pin|TopLED5_Pin|TopLED6_Pin|TopLED7_Pin 
                           |TopLED8_Pin|TopLED9_Pin|TopLEDA_Pin|TopLEDB_Pin 
-                          |TopLEDC_Pin|TopLEDD_Pin|TopLEDE_Pin|TopLEDF_Pin;
+                          |TopLEDC_Pin|TopLEDD_Pin|RGBLED2R_Pin|RGBLED3R_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : SteeringWheelButtonV_Pin */
+  GPIO_InitStruct.Pin = SteeringWheelButtonV_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(SteeringWheelButtonV_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : DataBus8_Pin DataBus9_Pin DataBusA_Pin DataBusB_Pin 
                            DataBusC_Pin DataBusD_Pin DataBusE_Pin DataBusF_Pin 
@@ -473,6 +492,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
 }
 

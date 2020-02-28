@@ -49,7 +49,7 @@ void display_layout_init(display_page** left,display_page** right, int amount_le
 	display_redraw_layout(DISPLAY_ID_ALL);
 }
 
-void display_redraw_layout(DISPLAY_ID id){
+void display_draw_layout(DISPLAY_ID id,int flags){
 	display_page* curr;
 	if (id & DISPLAY_ID_LEFT){
 		display_select(DISPLAY_ID_LEFT);
@@ -61,7 +61,7 @@ void display_redraw_layout(DISPLAY_ID id){
 			y = curr->regions[i].posy;
 			w = curr->regions[i].width;
 			h = curr->regions[i].height;			
-			curr->regions[i].handler(x,y,w,h, curr->regions[i].data, LAYOUT_FLAG_REDRAW);
+			uint8_t led = curr->regions[i].handler(x,y,w,h, curr->regions[i].data, LAYOUT_FLAG_REDRAW);
 		}
 	}
 	if (id & DISPLAY_ID_RIGHT){
@@ -74,37 +74,18 @@ void display_redraw_layout(DISPLAY_ID id){
 			y = curr->regions[i].posy;
 			w = curr->regions[i].width;
 			h = curr->regions[i].height;	
-			curr->regions[i].handler(x,y,w,h, curr->regions[i].data, LAYOUT_FLAG_REDRAW);
+			uint8_t led = curr->regions[i].handler(x,y,w,h, curr->regions[i].data, LAYOUT_FLAG_REDRAW);
+			
 		}
 	}
 }
 
+void display_redraw_layout(DISPLAY_ID id){
+	display_draw_layout(id,LAYOUT_FLAG_REDRAW);
+}
+
 void display_update_layout(DISPLAY_ID id){
-	display_page* curr;
-	if (id & DISPLAY_ID_LEFT){
-		display_select(DISPLAY_ID_LEFT);
-		curr = left_pages[current_left_page];
-		for (int i = 0;i < curr->amount_regions; i++){
-			uint16_t x,y,w,h;
-			x = curr->regions[i].posx;
-			y = curr->regions[i].posy;
-			w = curr->regions[i].width;
-			h = curr->regions[i].height;	
-			curr->regions[i].handler(x,y,w,h, curr->regions[i].data, 0);
-		}
-	}
-	if (id & DISPLAY_ID_RIGHT){
-		display_select(DISPLAY_ID_RIGHT);
-		curr = right_pages[current_right_page];
-		for (int i = 0;i < curr->amount_regions; i++){
-			uint16_t x,y,w,h;
-			x = curr->regions[i].posx;
-			y = curr->regions[i].posy;
-			w = curr->regions[i].width;
-			h = curr->regions[i].height;	
-			curr->regions[i].handler(x,y,w,h, curr->regions[i].data, 0);
-		}
-	}
+	display_draw_layout(id, 0);
 }
 
 
