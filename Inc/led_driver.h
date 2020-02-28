@@ -7,62 +7,58 @@
 #define USE_LED_UPDATE_FLAG
 #define BLINKING_PRESCALER (1)
 
-
-typedef enum {
-	LEFT_SIDE_LED_0  = 1<<16,
-	LEFT_SIDE_LED_1  = 1<<17,
-	LEFT_SIDE_LED_2  = 1<<18,
-	LEFT_SIDE_LED_3  = 1<<19,
+#define	LEFT_SIDE_LED_0  (0x00010000)
+#define	LEFT_SIDE_LED_1  (0x00020000)
+#define	LEFT_SIDE_LED_2  (0x00040000)
+#define	LEFT_SIDE_LED_3  (0x00080000)
 	
-	RIGHT_SIDE_LED_0 = 1<<20,
-	RIGHT_SIDE_LED_1 = 1<<21,
-	RIGHT_SIDE_LED_2 = 1<<22,
-	RIGHT_SIDE_LED_3 = 1<<23,
+#define	RIGHT_SIDE_LED_0 (0x00100000)
+#define	RIGHT_SIDE_LED_1 (0x00200000)
+#define	RIGHT_SIDE_LED_2 (0x00400000)
+#define	RIGHT_SIDE_LED_3 (0x00800000)
 		
-	RGB_LED_0_R      = 1<<0,
-	RGB_LED_1_R      = 1<<1,
-	RGB_LED_2_R      = 1<<14,
-	RGB_LED_3_R      = 1<<15,
+#define	RGB_LED_0_R      (0x00000001)
+#define	RGB_LED_1_R      (0x00000002)
+#define	RGB_LED_2_R      (0x00004000)
+#define	RGB_LED_3_R      (0x00008000)
 
-	RGB_LED_0_G      = 1<<24,
-	RGB_LED_1_G      = 1<<25,
-	RGB_LED_2_G      = 1<<26,
-	RGB_LED_3_G      = 1<<27,
+#define	RGB_LED_0_G      (0x01000000)
+#define	RGB_LED_1_G      (0x02000000)
+#define	RGB_LED_2_G      (0x04000000)
+#define	RGB_LED_3_G      (0x08000000)
 
-	RGB_LED_0_B      = 1<<28,
-	RGB_LED_1_B      = 1<<29,
-	RGB_LED_2_B      = 1<<30,
-	RGB_LED_3_B      = 1<<31,
+#define	RGB_LED_0_B      (0x10000000)
+#define	RGB_LED_1_B      (0x20000000)
+#define	RGB_LED_2_B      (0x40000000)
+#define	RGB_LED_3_B      (0x80000000)
 
-	RGB_LED_0        = RGB_LED_0_R | RGB_LED_0_G | RGB_LED_0_B,
-	RGB_LED_1        = RGB_LED_1_R | RGB_LED_1_G | RGB_LED_1_B,
-	RGB_LED_2        = RGB_LED_2_R | RGB_LED_2_G | RGB_LED_2_B,
-	RGB_LED_3        = RGB_LED_3_R | RGB_LED_3_G | RGB_LED_3_B,
+#define	RGB_LED_0        (RGB_LED_0_R | RGB_LED_0_G | RGB_LED_0_B)
+#define	RGB_LED_1        (RGB_LED_1_R | RGB_LED_1_G | RGB_LED_1_B)
+#define	RGB_LED_2        (RGB_LED_2_R | RGB_LED_2_G | RGB_LED_2_B)
+#define	RGB_LED_3        (RGB_LED_3_R | RGB_LED_3_G | RGB_LED_3_B)
 	
-	RGB_LED_R        = RGB_LED_0_R | RGB_LED_1_R | RGB_LED_2_R | RGB_LED_3_R,
-	RGB_LED_G        = RGB_LED_0_G | RGB_LED_1_G | RGB_LED_2_G | RGB_LED_3_G,
-	RGB_LED_B        = RGB_LED_0_B | RGB_LED_1_B | RGB_LED_2_B | RGB_LED_3_B,
+#define	RGB_LED_R        (RGB_LED_0_R | RGB_LED_1_R | RGB_LED_2_R | RGB_LED_3_R)
+#define	RGB_LED_G        (RGB_LED_0_G | RGB_LED_1_G | RGB_LED_2_G | RGB_LED_3_G)
+#define	RGB_LED_B        (RGB_LED_0_B | RGB_LED_1_B | RGB_LED_2_B | RGB_LED_3_B)
 
-	TOP_LED_0        = 1<<0,
-	TOP_LED_1        = 1<<1,
-	TOP_LED_2        = 1<<2,
-	TOP_LED_3        = 1<<3,
-	TOP_LED_4        = 1<<4,
-	TOP_LED_5        = 1<<5,
-	TOP_LED_6        = 1<<6,
-	TOP_LED_7        = 1<<7,
-	TOP_LED_8        = 1<<8,
-	TOP_LED_9        = 1<<9,
-	TOP_LED_10       = 1<<10,
-	TOP_LED_11       = 1<<11,
-	TOP_LED_12       = 1<<12,
-	TOP_LED_13       = 1<<13,
-	TOP_LED_14       = 1<<14,
-	TOP_LED_15       = 1<<15,
+#define	TOP_LED_0        (0x00000001)
+#define	TOP_LED_1        (0x00000002)
+#define	TOP_LED_2        (0x00000004)
+#define	TOP_LED_3        (0x00000008)
+#define	TOP_LED_4        (0x00000010)
+#define	TOP_LED_5        (0x00000020)
+#define	TOP_LED_6        (0x00000040)
+#define	TOP_LED_7        (0x00000080)
+#define	TOP_LED_8        (0x00000100)
+#define	TOP_LED_9        (0x00000200)
+#define	TOP_LED_10       (0x00000400)
+#define	TOP_LED_11       (0x00000800)
+#define	TOP_LED_12       (0x00001000)
+#define	TOP_LED_13       (0x00002000)
+#define	TOP_LED_14       (0x00004000)
+#define	TOP_LED_15       (0x00008000)
 	
-	RPM_LEDS         = TOP_LED_2 | TOP_LED_3 | TOP_LED_4 | TOP_LED_5 | TOP_LED_6 | TOP_LED_7 | TOP_LED_8 | TOP_LED_9 | TOP_LED_10 | TOP_LED_11 | TOP_LED_12 | TOP_LED_13,
-	
-}LED_ID;
+#define	RPM_LEDS         (TOP_LED_2 | TOP_LED_3 | TOP_LED_4 | TOP_LED_5 | TOP_LED_6 | TOP_LED_7 | TOP_LED_8 | TOP_LED_9 | TOP_LED_10 | TOP_LED_11 | TOP_LED_12 | TOP_LED_13,
 
 
 typedef enum{

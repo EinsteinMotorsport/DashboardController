@@ -27,6 +27,7 @@
 #include "display_layout.h"
 #include "can_data_provider.h"
 #include "display_renderer.h"
+#include "led_driver.h"
 #include <stdlib.h>
 
 /* USER CODE END Includes */
@@ -119,6 +120,7 @@ int main(void)
 	
 
 	display_init();
+	led_init();
 	can_data_init(&hcan1);
 	
 	display_page** left = generate_left_pages();
