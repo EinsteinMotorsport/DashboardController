@@ -43,13 +43,13 @@ uint8_t color_fill_renderer(uint16_t x,uint16_t y,uint16_t w,uint16_t h, void* d
 }
 
 uint8_t logo_renderer(uint16_t x, uint16_t y, uint16_t w, uint16_t h, void* data, uint16_t flags){
-	
-	display_set_rect(200,0,120,80);
-	for (int i = 0; i<1200;i++){
-		char a = einstein_logo[i];
-		for (int i = 7; i>= 0; i--)display_write_data(a & 1<<i ? YELLOW : BLACK);
+	if (flags & 1){
+		display_set_rect(200,0,120,80);
+		for (int i = 0; i<1200;i++){
+			char a = einstein_logo[i];
+			for (int i = 7; i>= 0; i--)display_write_data(a & 1<<i ? YELLOW : BLACK);
+		}
 	}
-
 	return 0;
 
 }

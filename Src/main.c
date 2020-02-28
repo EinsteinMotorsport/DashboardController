@@ -530,7 +530,7 @@ display_page** generate_left_pages(){
 	display_region* page0 = malloc(sizeof(display_region) * 7);
 	if(!page0) Error_Handler();
 	page0[0] = (display_region){&test_4,0,0,320,240,color_fill_renderer,0};
-	page0[1] = (display_region){&test_5, 0, 0, 320, 80, text_renderer,LEFT_SIDE_LED_0};
+	page0[1] = (display_region){&test_5, 0, 0, 200, 80, text_renderer,LEFT_SIDE_LED_0};
 	page0[2] = (display_region){&test_6, 5, 240 - 3*3*16 - 10, 7*3*10, 3*16, text_renderer,LEFT_SIDE_LED_1};
 	page0[3] = (display_region){&test_7, 5, 240 - 2*3*16 - 5, 7*3*10, 3*16, text_renderer,LEFT_SIDE_LED_2};
 	page0[4] = (display_region){&test_8, 5, 240 - 1*3*16, 7*3*10, 3*16, text_renderer,LEFT_SIDE_LED_3};
