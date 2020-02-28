@@ -28,6 +28,7 @@ typedef struct{
 
 uint8_t text_renderer(uint16_t x,uint16_t y,uint16_t w,uint16_t h, void* data, uint16_t flags);
 uint8_t color_fill_renderer(uint16_t x,uint16_t y,uint16_t w,uint16_t h, void* data, uint16_t flags);
+uint8_t logo_renderer(uint16_t x,uint16_t y,uint16_t w,uint16_t h, void* data, uint16_t flags);
 
 #endif
 

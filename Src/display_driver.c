@@ -31,6 +31,23 @@ inline void display_write_command(DISPLAY_COMMAND command){
 //	HAL_Delay(1);
 }
 
+inline void display_set_rect(uint16_t x,uint16_t y,uint16_t w,uint16_t h){
+	display_write_command(D_CMD_CASET);
+	display_write_data(x >> 8);
+	display_write_data(x & 0xFF);//X address set
+	x += w - 1;
+	display_write_data(x >> 8);
+	display_write_data(x & 0xFF);//X address set
+
+	display_write_command(D_CMD_RASET);
+	display_write_data(y >> 8);
+	display_write_data(y & 0xFF);//Y address set
+	y += h - 1;
+	display_write_data(y >> 8);
+	display_write_data(y & 0xFF);//Y address set
+	display_write_command(D_CMD_RAMWR);
+}
+
 
 inline void display_write_data(uint16_t data){
 	
@@ -44,20 +61,7 @@ inline void display_write_data(uint16_t data){
 
 
 void display_fill_rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t color){
-	display_write_command(D_CMD_CASET);
-	display_write_data(x >> 8);
-	display_write_data(x & 0xFF);//X address set
-	x += width - 1;
-	display_write_data(x >> 8);
-	display_write_data(x & 0xFF);//X address set
-
-	display_write_command(D_CMD_RASET);
-	display_write_data(y >> 8);
-	display_write_data(y & 0xFF);//Y address set
-	y += height - 1;
-	display_write_data(y >> 8);
-	display_write_data(y & 0xFF);//Y address set
-	display_write_command(D_CMD_RAMWR);
+	display_set_rect(x,y,width,height);
 	
 	for(int i = width*height; i > 0; i--){
 		display_write_data(color);

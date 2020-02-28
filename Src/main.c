@@ -527,7 +527,7 @@ display_page** generate_left_pages(){
 	
 	const int number_pages = 1;
 	
-	display_region* page0 = malloc(sizeof(display_region) * 6);
+	display_region* page0 = malloc(sizeof(display_region) * 7);
 	if(!page0) Error_Handler();
 	page0[0] = (display_region){&test_4,0,0,320,240,color_fill_renderer,0};
 	page0[1] = (display_region){&test_5, 0, 0, 320, 80, text_renderer,LEFT_SIDE_LED_0};
@@ -535,10 +535,11 @@ display_page** generate_left_pages(){
 	page0[3] = (display_region){&test_7, 5, 240 - 2*3*16 - 5, 7*3*10, 3*16, text_renderer,LEFT_SIDE_LED_2};
 	page0[4] = (display_region){&test_8, 5, 240 - 1*3*16, 7*3*10, 3*16, text_renderer,LEFT_SIDE_LED_3};
 	page0[5] = (display_region){&test_9, 220,80,100,160,text_renderer};
+	page0[6] = (display_region){0,200,0,120,80,logo_renderer};
 
 	display_page* pages = malloc(sizeof(display_page) * number_pages);		
 	if (!pages) Error_Handler();
-	pages[0] = (display_page){6,page0};	
+	pages[0] = (display_page){7,page0};	
 	
 	display_page** ret = malloc(sizeof(void*) * number_pages);
 	if (!ret) Error_Handler();
