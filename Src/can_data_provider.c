@@ -2,6 +2,8 @@
 #include <stdlib.h>
 
 static can_value* values; 
+static float* min_val;
+static float* max_val;
 
 static void can_data_handle_10(uint8_t* data);
 static void can_data_handle_11(uint8_t* data);
@@ -19,13 +21,32 @@ static void can_data_handle_20(uint8_t* data);
 
 static CAN_HandleTypeDef* hcan;
 
+static void init_min_max_vals(){
+	min_val[TMOT]     = 70.0f; max_val[TMOT]     = 110.0f;
+	min_val[TMOT2]    = 60.0f; max_val[TMOT2]    = 105.0f;
+	min_val[TFUEL]    =  5.0f; max_val[TFUEL]    =  55.0f;
+	min_val[TOIL]     = 60.0f; max_val[TOIL]     = 130.0f;
+	min_val[PFUEL]    =  4.0f; max_val[PFUEL]    =   5.5f;
+	min_val[POIL]     =  0.4f; max_val[POIL]     =   2.0f;
+	min_val[UB]       =  9.0f; max_val[UB]       =  14.4f;
+	min_val[LAMBDA]   =  0.8f; max_val[LAMBDA]   =   1.3f;
+	min_val[TECU_SYS] =  0.0f; max_val[TECU_SYS] =  55.0f;
+}
+
 void can_data_init(CAN_HandleTypeDef* _hcan){
 	hcan = _hcan;
 	values = malloc(sizeof(can_value) * NUMBER_CAN_VALUES);
+	min_val = malloc(sizeof(float) * NUMBER_CAN_VALUES);
+	max_val = malloc(sizeof(float) * NUMBER_CAN_VALUES);
+	init_min_max_vals();
+}
+
+static inline uint8_t check_range(int id, float val){
+	return (val > max_val[id] ? 0x2 : 0) | (val < min_val[id] ? 0x4 : 0); 
 }
 
 static inline void update(int id, float val){
-	if (values[id].value != val) values[id].value = val, values[id].did_change = 1;
+	if (values[id].value != val) values[id].value = val, values[id].flags = 1 | check_range(id,val);
 }
 
 

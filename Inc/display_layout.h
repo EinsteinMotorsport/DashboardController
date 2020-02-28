@@ -50,6 +50,7 @@ typedef struct display_region{
 	uint16_t posx, posy;
 	uint16_t width, height;
 	uint8_t (*handler)(uint16_t x,uint16_t y,uint16_t w,uint16_t h, void*, uint16_t);
+	uint32_t led_id;
 }display_region;
 
 typedef struct{

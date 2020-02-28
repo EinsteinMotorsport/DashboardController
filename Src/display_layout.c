@@ -1,5 +1,6 @@
 #include "display_layout.h"
 #include <stdio.h>
+#include "led_driver.h"
 
 
 
@@ -74,8 +75,8 @@ void display_draw_layout(DISPLAY_ID id,int flags){
 			y = curr->regions[i].posy;
 			w = curr->regions[i].width;
 			h = curr->regions[i].height;	
-			uint8_t led = curr->regions[i].handler(x,y,w,h, curr->regions[i].data, LAYOUT_FLAG_REDRAW);
-			
+			uint8_t led_flags = curr->regions[i].handler(x,y,w,h, curr->regions[i].data, LAYOUT_FLAG_REDRAW);
+			led_set(curr->regions[i].led_id,led_flags);
 		}
 	}
 }

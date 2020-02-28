@@ -529,10 +529,10 @@ display_page** generate_left_pages(){
 	
 	display_region* page0 = malloc(sizeof(display_region) * 5);
 	if(!page0) Error_Handler();
-	page0[0] = (display_region){&test_5, 0, 0, 320, 80, text_renderer};
-	page0[1] = (display_region){&test_6, 5, 240 - 3*3*16 - 10, 7*3*10, 3*16, text_renderer};
-	page0[2] = (display_region){&test_7, 5, 240 - 2*3*16 - 5, 7*3*10, 3*16, text_renderer};
-	page0[3] = (display_region){&test_8, 5, 240 - 1*3*16, 7*3*10, 3*16, text_renderer};
+	page0[0] = (display_region){&test_5, 0, 0, 320, 80, text_renderer,LEFT_SIDE_LED_0};
+	page0[1] = (display_region){&test_6, 5, 240 - 3*3*16 - 10, 7*3*10, 3*16, text_renderer,LEFT_SIDE_LED_1};
+	page0[2] = (display_region){&test_7, 5, 240 - 2*3*16 - 5, 7*3*10, 3*16, text_renderer,LEFT_SIDE_LED_2};
+	page0[3] = (display_region){&test_8, 5, 240 - 1*3*16, 7*3*10, 3*16, text_renderer,LEFT_SIDE_LED_3};
 	page0[4] = (display_region){&test_9, 220,80,100,160,text_renderer};
 
 	display_page* pages = malloc(sizeof(display_page) * number_pages);		
@@ -590,31 +590,31 @@ display_page** generate_right_pages(){
 	
 	display_region* page0 = malloc(sizeof(display_region) * 4);
 	if(!page0) Error_Handler();
-	page0[0] = (display_region){&rp0l0, 0, 0, 320, 60, text_renderer};
-	page0[1] = (display_region){&rp0l1, 0, 60, 320, 60, text_renderer};
-	page0[2] = (display_region){&rp0l2, 0, 120, 320, 60, text_renderer};
-	page0[3] = (display_region){&rp0l3, 0, 180, 320, 60, text_renderer};
+	page0[0] = (display_region){&rp0l0, 0, 0, 320, 60, text_renderer,RIGHT_SIDE_LED_0};
+	page0[1] = (display_region){&rp0l1, 0, 60, 320, 60, text_renderer,RIGHT_SIDE_LED_1};
+	page0[2] = (display_region){&rp0l2, 0, 120, 320, 60, text_renderer,RIGHT_SIDE_LED_2};
+	page0[3] = (display_region){&rp0l3, 0, 180, 320, 60, text_renderer,RIGHT_SIDE_LED_3};
 
 	display_region* page1 = malloc(sizeof(display_region) * 4);
 	if(!page0) Error_Handler();
-	page1[0] = (display_region){&rp1l0, 0, 0, 320, 60, text_renderer};
-	page1[1] = (display_region){&rp1l1, 0, 60, 320, 60, text_renderer};
-	page1[2] = (display_region){&rp1l2, 0, 120, 320, 60, text_renderer};
-	page1[3] = (display_region){&rp1l3, 0, 180, 320, 60, text_renderer};
+	page1[0] = (display_region){&rp1l0, 0, 0, 320, 60, text_renderer,RIGHT_SIDE_LED_0};
+	page1[1] = (display_region){&rp1l1, 0, 60, 320, 60, text_renderer,RIGHT_SIDE_LED_1};
+	page1[2] = (display_region){&rp1l2, 0, 120, 320, 60, text_renderer,RIGHT_SIDE_LED_2};
+	page1[3] = (display_region){&rp1l3, 0, 180, 320, 60, text_renderer,RIGHT_SIDE_LED_3};
 	
 	display_region* page2 = malloc(sizeof(display_region) * 4);
 	if(!page0) Error_Handler();
-	page2[0] = (display_region){&rp2l0, 0, 0, 320, 60, text_renderer};
-	page2[1] = (display_region){&rp2l1, 0, 60, 320, 60, text_renderer};
-	page2[2] = (display_region){&rp2l2, 0, 120, 320, 60, text_renderer};
-	page2[3] = (display_region){&rp2l3, 0, 180, 320, 60, text_renderer};
+	page2[0] = (display_region){&rp2l0, 0, 0, 320, 60, text_renderer,RIGHT_SIDE_LED_0};
+	page2[1] = (display_region){&rp2l1, 0, 60, 320, 60, text_renderer,RIGHT_SIDE_LED_1};
+	page2[2] = (display_region){&rp2l2, 0, 120, 320, 60, text_renderer,RIGHT_SIDE_LED_2};
+	page2[3] = (display_region){&rp2l3, 0, 180, 320, 60, text_renderer,RIGHT_SIDE_LED_3};
 	
 	display_region* page3 = malloc(sizeof(display_region) * 4);
 	if(!page0) Error_Handler();
-	page3[0] = (display_region){&rp3l0, 0, 0, 320, 60, text_renderer};
-	page3[1] = (display_region){&rp3l1, 0, 60, 320, 60, text_renderer};
-	page3[2] = (display_region){&rp3l2, 0, 120, 320, 60, text_renderer};
-	page3[3] = (display_region){&rp3l3, 0, 180, 320, 60, text_renderer};
+	page3[0] = (display_region){&rp3l0, 0, 0, 320, 60, text_renderer,RIGHT_SIDE_LED_0};
+	page3[1] = (display_region){&rp3l1, 0, 60, 320, 60, text_renderer,RIGHT_SIDE_LED_1};
+	page3[2] = (display_region){&rp3l2, 0, 120, 320, 60, text_renderer,RIGHT_SIDE_LED_2};
+	page3[3] = (display_region){&rp3l3, 0, 180, 320, 60, text_renderer,RIGHT_SIDE_LED_3};
 
 	
 	display_page* pages = malloc(sizeof(display_page) * number_pages);		
