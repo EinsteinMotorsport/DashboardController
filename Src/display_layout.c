@@ -54,7 +54,6 @@ void display_draw_layout(DISPLAY_ID id,int flags){
 	display_page* curr;
 	if (id & DISPLAY_ID_LEFT){
 		display_select(DISPLAY_ID_LEFT);
-		display_fill(BLACK);
 		curr = left_pages[current_left_page];
 		for (int i = 0;i < curr->amount_regions; i++){
 			uint16_t x,y,w,h;
@@ -62,12 +61,11 @@ void display_draw_layout(DISPLAY_ID id,int flags){
 			y = curr->regions[i].posy;
 			w = curr->regions[i].width;
 			h = curr->regions[i].height;			
-			uint8_t led = curr->regions[i].handler(x,y,w,h, curr->regions[i].data, LAYOUT_FLAG_REDRAW);
+			uint8_t led = curr->regions[i].handler(x,y,w,h, curr->regions[i].data, flags);
 		}
 	}
 	if (id & DISPLAY_ID_RIGHT){
 		display_select(DISPLAY_ID_RIGHT);
-		display_fill(BLACK);
 		curr = right_pages[current_right_page];
 		for (int i = 0;i < curr->amount_regions; i++){
 			uint16_t x,y,w,h;
@@ -75,7 +73,7 @@ void display_draw_layout(DISPLAY_ID id,int flags){
 			y = curr->regions[i].posy;
 			w = curr->regions[i].width;
 			h = curr->regions[i].height;	
-			uint8_t led_flags = curr->regions[i].handler(x,y,w,h, curr->regions[i].data, LAYOUT_FLAG_REDRAW);
+			uint8_t led_flags = curr->regions[i].handler(x,y,w,h, curr->regions[i].data, flags);
 			led_set(curr->regions[i].led_id,led_flags);
 		}
 	}

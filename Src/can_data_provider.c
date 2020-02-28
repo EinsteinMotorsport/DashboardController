@@ -1,5 +1,6 @@
 #include "can_data_provider.h"
 #include <stdlib.h>
+#include <math.h>
 
 static can_value* values; 
 static float* min_val;
@@ -22,6 +23,7 @@ static void can_data_handle_20(uint8_t* data);
 static CAN_HandleTypeDef* hcan;
 
 static void init_min_max_vals(){
+	for(int i = 0; i< NUMBER_CAN_VALUES;i++) min_val[i] = -INFINITY, max_val[i] = INFINITY;
 	min_val[TMOT]     = 70.0f; max_val[TMOT]     = 110.0f;
 	min_val[TMOT2]    = 60.0f; max_val[TMOT2]    = 105.0f;
 	min_val[TFUEL]    =  5.0f; max_val[TFUEL]    =  55.0f;

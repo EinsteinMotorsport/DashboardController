@@ -137,12 +137,12 @@ int main(void)
 	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9);
 	
 	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_9,GPIO_PIN_RESET);
-	unsigned int i = 0;
+	//unsigned int i = 0;
   while (1){
-		if (i++>100000 && 0) {
+		/*if (i++>100000 && 0) {
 			i=0;
 			display_layout_next_page(DISPLAY_ID_RIGHT);
-		}
+		}*/
 		//HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_5);
 		
 				
@@ -479,7 +479,7 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin : SteeringWheelButtonV_Pin */
   GPIO_InitStruct.Pin = SteeringWheelButtonV_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(SteeringWheelButtonV_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : DataBus8_Pin DataBus9_Pin DataBusA_Pin DataBusB_Pin 
@@ -515,7 +515,7 @@ color_fill_data test_0 = {PINK,   BLUE};
 color_fill_data test_1 = {CYAN,   BLUE};
 color_fill_data test_2 = {YELLOW, BLUE};
 color_fill_data test_3 = {GREEN,  BLUE};
-color_fill_data test_4 = {RED,    BLUE};
+color_fill_data test_4 = {BLACK,  BLACK};
 
 display_page** generate_left_pages(){
 	
@@ -527,17 +527,18 @@ display_page** generate_left_pages(){
 	
 	const int number_pages = 1;
 	
-	display_region* page0 = malloc(sizeof(display_region) * 5);
+	display_region* page0 = malloc(sizeof(display_region) * 6);
 	if(!page0) Error_Handler();
-	page0[0] = (display_region){&test_5, 0, 0, 320, 80, text_renderer,LEFT_SIDE_LED_0};
-	page0[1] = (display_region){&test_6, 5, 240 - 3*3*16 - 10, 7*3*10, 3*16, text_renderer,LEFT_SIDE_LED_1};
-	page0[2] = (display_region){&test_7, 5, 240 - 2*3*16 - 5, 7*3*10, 3*16, text_renderer,LEFT_SIDE_LED_2};
-	page0[3] = (display_region){&test_8, 5, 240 - 1*3*16, 7*3*10, 3*16, text_renderer,LEFT_SIDE_LED_3};
-	page0[4] = (display_region){&test_9, 220,80,100,160,text_renderer};
+	page0[0] = (display_region){&test_4,0,0,320,240,color_fill_renderer,0};
+	page0[1] = (display_region){&test_5, 0, 0, 320, 80, text_renderer,LEFT_SIDE_LED_0};
+	page0[2] = (display_region){&test_6, 5, 240 - 3*3*16 - 10, 7*3*10, 3*16, text_renderer,LEFT_SIDE_LED_1};
+	page0[3] = (display_region){&test_7, 5, 240 - 2*3*16 - 5, 7*3*10, 3*16, text_renderer,LEFT_SIDE_LED_2};
+	page0[4] = (display_region){&test_8, 5, 240 - 1*3*16, 7*3*10, 3*16, text_renderer,LEFT_SIDE_LED_3};
+	page0[5] = (display_region){&test_9, 220,80,100,160,text_renderer};
 
 	display_page* pages = malloc(sizeof(display_page) * number_pages);		
 	if (!pages) Error_Handler();
-	pages[0] = (display_page){5,page0};	
+	pages[0] = (display_page){6,page0};	
 	
 	display_page** ret = malloc(sizeof(void*) * number_pages);
 	if (!ret) Error_Handler();
@@ -545,9 +546,9 @@ display_page** generate_left_pages(){
 	return ret;
 }
 
-text_renderer_data rp0l0 = {"speed %5.0f km/h",0,2,BLACK,YELLOW,GREEN};
-text_renderer_data rp0l1 = {"Tmot2 %5.0f \u00f8C",0,2,WHITE,RED,GREEN};
-text_renderer_data rp0l2 = {"Tfuel %5.0f \u00f8C",0,2,BLACK,YELLOW,GREEN};
+text_renderer_data rp0l0 = {"speed %5.0f km/h",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp0l1 = {"Tmot2 %5.0f \u00f8C",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp0l2 = {"Tfuel %5.0f \u00f8C",0,2,WHITE,BLACK,GREEN};
 text_renderer_data rp0l3 = {"Pfuel   %2.1f bar",0,2,WHITE,BLACK,GREEN};
 
 text_renderer_data rp1l0 = {"fuel_con%5.0f",0,2,WHITE,BLACK,GREEN};
@@ -588,41 +589,45 @@ display_page** generate_right_pages(){
 
 	const int number_pages = 4;
 	
-	display_region* page0 = malloc(sizeof(display_region) * 4);
+	display_region* page0 = malloc(sizeof(display_region) * 5);
 	if(!page0) Error_Handler();
-	page0[0] = (display_region){&rp0l0, 0, 0, 320, 60, text_renderer,RIGHT_SIDE_LED_0};
-	page0[1] = (display_region){&rp0l1, 0, 60, 320, 60, text_renderer,RIGHT_SIDE_LED_1};
-	page0[2] = (display_region){&rp0l2, 0, 120, 320, 60, text_renderer,RIGHT_SIDE_LED_2};
-	page0[3] = (display_region){&rp0l3, 0, 180, 320, 60, text_renderer,RIGHT_SIDE_LED_3};
+	page0[0] = (display_region){&test_4,0,0,320,240,color_fill_renderer,0};
+	page0[1] = (display_region){&rp0l0, 0, 0, 320, 60, text_renderer,RIGHT_SIDE_LED_0};
+	page0[2] = (display_region){&rp0l1, 0, 60, 320, 60, text_renderer,RIGHT_SIDE_LED_1};
+	page0[3] = (display_region){&rp0l2, 0, 120, 320, 60, text_renderer,RIGHT_SIDE_LED_2};
+	page0[4] = (display_region){&rp0l3, 0, 180, 320, 60, text_renderer,RIGHT_SIDE_LED_3};
 
-	display_region* page1 = malloc(sizeof(display_region) * 4);
+	display_region* page1 = malloc(sizeof(display_region) * 5);
 	if(!page0) Error_Handler();
-	page1[0] = (display_region){&rp1l0, 0, 0, 320, 60, text_renderer,RIGHT_SIDE_LED_0};
-	page1[1] = (display_region){&rp1l1, 0, 60, 320, 60, text_renderer,RIGHT_SIDE_LED_1};
-	page1[2] = (display_region){&rp1l2, 0, 120, 320, 60, text_renderer,RIGHT_SIDE_LED_2};
-	page1[3] = (display_region){&rp1l3, 0, 180, 320, 60, text_renderer,RIGHT_SIDE_LED_3};
+	page1[0] = (display_region){&test_4,0,0,320,240,color_fill_renderer,0};
+	page1[1] = (display_region){&rp1l0, 0, 0, 320, 60, text_renderer,RIGHT_SIDE_LED_0};
+	page1[2] = (display_region){&rp1l1, 0, 60, 320, 60, text_renderer,RIGHT_SIDE_LED_1};
+	page1[3] = (display_region){&rp1l2, 0, 120, 320, 60, text_renderer,RIGHT_SIDE_LED_2};
+	page1[4] = (display_region){&rp1l3, 0, 180, 320, 60, text_renderer,RIGHT_SIDE_LED_3};
 	
-	display_region* page2 = malloc(sizeof(display_region) * 4);
+	display_region* page2 = malloc(sizeof(display_region) * 5);
 	if(!page0) Error_Handler();
-	page2[0] = (display_region){&rp2l0, 0, 0, 320, 60, text_renderer,RIGHT_SIDE_LED_0};
-	page2[1] = (display_region){&rp2l1, 0, 60, 320, 60, text_renderer,RIGHT_SIDE_LED_1};
-	page2[2] = (display_region){&rp2l2, 0, 120, 320, 60, text_renderer,RIGHT_SIDE_LED_2};
-	page2[3] = (display_region){&rp2l3, 0, 180, 320, 60, text_renderer,RIGHT_SIDE_LED_3};
+	page2[0] = (display_region){&test_4,0,0,320,240,color_fill_renderer,0};
+	page2[1] = (display_region){&rp2l0, 0, 0, 320, 60, text_renderer,RIGHT_SIDE_LED_0};
+	page2[2] = (display_region){&rp2l1, 0, 60, 320, 60, text_renderer,RIGHT_SIDE_LED_1};
+	page2[3] = (display_region){&rp2l2, 0, 120, 320, 60, text_renderer,RIGHT_SIDE_LED_2};
+	page2[4] = (display_region){&rp2l3, 0, 180, 320, 60, text_renderer,RIGHT_SIDE_LED_3};
 	
-	display_region* page3 = malloc(sizeof(display_region) * 4);
+	display_region* page3 = malloc(sizeof(display_region) * 5);
 	if(!page0) Error_Handler();
-	page3[0] = (display_region){&rp3l0, 0, 0, 320, 60, text_renderer,RIGHT_SIDE_LED_0};
-	page3[1] = (display_region){&rp3l1, 0, 60, 320, 60, text_renderer,RIGHT_SIDE_LED_1};
-	page3[2] = (display_region){&rp3l2, 0, 120, 320, 60, text_renderer,RIGHT_SIDE_LED_2};
-	page3[3] = (display_region){&rp3l3, 0, 180, 320, 60, text_renderer,RIGHT_SIDE_LED_3};
+	page3[0] = (display_region){&test_4,0,0,320,240,color_fill_renderer,0};
+	page3[1] = (display_region){&rp3l0, 0, 0, 320, 60, text_renderer,RIGHT_SIDE_LED_0};
+	page3[2] = (display_region){&rp3l1, 0, 60, 320, 60, text_renderer,RIGHT_SIDE_LED_1};
+	page3[3] = (display_region){&rp3l2, 0, 120, 320, 60, text_renderer,RIGHT_SIDE_LED_2};
+	page3[4] = (display_region){&rp3l3, 0, 180, 320, 60, text_renderer,RIGHT_SIDE_LED_3};
 
 	
 	display_page* pages = malloc(sizeof(display_page) * number_pages);		
 	if (!pages) Error_Handler();
-	pages[0] = (display_page){4,page0};	
-	pages[1] = (display_page){4,page1};
-	pages[2] = (display_page){4,page2};
-	pages[3] = (display_page){4,page3};
+	pages[0] = (display_page){5,page0};	
+	pages[1] = (display_page){5,page1};
+	pages[2] = (display_page){5,page2};
+	pages[3] = (display_page){5,page3};
 	
 	
 	display_page** ret = malloc(sizeof(void*) * number_pages);

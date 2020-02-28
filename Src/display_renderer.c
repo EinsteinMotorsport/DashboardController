@@ -17,8 +17,10 @@ uint8_t text_renderer(uint16_t x,uint16_t y,uint16_t w,uint16_t h, void* data, u
 		int rows =  h / (FONT_HEIGHT * _data->scale);
 		int yoff = (h - (rows*FONT_HEIGHT))/2;
 		
-		display_fill_rect(x,y,w,yoff,bgc);
-		display_fill_rect(x,rows*FONT_HEIGHT+y+yoff,w,h-rows*FONT_HEIGHT-yoff,bgc);
+		//display_fill_rect(x,y,w,yoff,bgc);
+		//display_fill_rect(x,rows*FONT_HEIGHT+y+yoff,w,h-(rows*FONT_HEIGHT)-yoff,bgc);
+		
+		
 		char tmp[chars*rows + 1];
 		int a = snprintf(tmp,chars*rows + 1,_data->str,_data->can_value->value);
 		//char* tmp = _data->str;
