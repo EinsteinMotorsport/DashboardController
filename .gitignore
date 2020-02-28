@@ -8,7 +8,7 @@
 *.uvgui
 *.uvgui.*
 *.uvguix.*
-
+*/**/.DS_Store
 # Listing files
 *.cod
 *.htm
