@@ -552,22 +552,22 @@ display_page** generate_left_pages(){
 text_renderer_data rp0l0 = {"speed %5.0f km/h",0,2,WHITE,BLACK,GREEN};
 text_renderer_data rp0l1 = {"Tmot2 %5.0f \u00f8C",0,2,WHITE,BLACK,GREEN};
 text_renderer_data rp0l2 = {"Tfuel %5.0f \u00f8C",0,2,WHITE,BLACK,GREEN};
-text_renderer_data rp0l3 = {"Pfuel   %2.1f bar",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp0l3 = {"Pfuel %5.1f bar",0,2,WHITE,BLACK,GREEN};
 
-text_renderer_data rp1l0 = {"fuel_con%5.0f",0,2,WHITE,BLACK,GREEN};
-text_renderer_data rp1l1 = {"ub%5.0f V",0,2,WHITE,BLACK,GREEN};
-text_renderer_data rp1l2 = {"aps%5.0f",0,2,WHITE,BLACK,GREEN};
-text_renderer_data rp1l3 = {"ath%5.0f",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp1l0 = {"fuelcon %3.0f ltr",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp1l1 = {"ub    %5.1f V",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp1l2 = {"aps   %5.0f %%",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp1l3 = {"ath   %5.0f %%",0,2,WHITE,BLACK,GREEN};
 
-text_renderer_data rp2l0 = {"launchsw%5.0f",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp2l0 = {"lnchsw%5.0f",0,2,WHITE,BLACK,GREEN};
 text_renderer_data rp2l1 = {"lambda%5.0f",0,2,WHITE,BLACK,GREEN};
-text_renderer_data rp2l2 = {"%5.0f",0,2,WHITE,BLACK,GREEN};
-text_renderer_data rp2l3 = {"flc%5.0f",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp2l2 = {"      %5.0f",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp2l3 = {"flc   %5.0f",0,2,WHITE,BLACK,GREEN};
 
-text_renderer_data rp3l0 = {"TC-sw%5.0f",0,2,WHITE,BLACK,GREEN};
-text_renderer_data rp3l1 = {"pclutch%5.0f bar",0,2,WHITE,BLACK,GREEN};
-text_renderer_data rp3l2 = {"steer%5.0f",0,2,WHITE,BLACK,GREEN};
-text_renderer_data rp3l3 = {"fan_pwm%5.0f",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp3l0 = {"TC-sw %5.0f",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp3l1 = {"Pcltch%5.0f bar",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp3l2 = {"steer %5.0f \u00f8",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp3l3 = {"fanPWM%5.0f %%",0,2,WHITE,BLACK,GREEN};
 
 display_page** generate_right_pages(){
 	

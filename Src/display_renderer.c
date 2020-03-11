@@ -16,9 +16,9 @@ uint8_t text_renderer(uint16_t x,uint16_t y,uint16_t w,uint16_t h, void* data, u
 		
 		int chars = (w) / (FONT_WIDTH * _data->scale);
 		int rows =  h / (FONT_HEIGHT * _data->scale);
-//		int yoff = (h - (rows*FONT_HEIGHT))/2;
+		int yoff = (h - (rows*FONT_HEIGHT* _data->scale))/2;
 		
-		//display_fill_rect(x,y,w,yoff,bgc);
+		display_fill_rect(x,y,w,yoff,bgc);
 		//display_fill_rect(x,rows*FONT_HEIGHT+y+yoff,w,h-(rows*FONT_HEIGHT)-yoff,bgc);
 		
 		
@@ -26,9 +26,13 @@ uint8_t text_renderer(uint16_t x,uint16_t y,uint16_t w,uint16_t h, void* data, u
 		int a = snprintf(tmp,chars*rows + 1,_data->str,_data->can_value->value);
 		//char* tmp = _data->str;
 		for (int j = 0; j<rows;j++){
-			display_print_n_string(tmp+j*chars,x,y+j*_data->scale*FONT_HEIGHT,_data->scale,fgc,bgc,chars);
+			display_print_n_string(tmp+j*chars,x,y+yoff+j*_data->scale*FONT_HEIGHT,_data->scale,fgc,bgc,chars);
 		}
 		_data->can_value->flags &= ~1;
+		display_fill_rect(x,rows*FONT_HEIGHT*_data->scale+y+yoff,w,(h -(rows*FONT_HEIGHT*_data->scale))- yoff,bgc);
+		//display_fill_rect(x,y,w,yoff,RED);
+
+
 	}
 	return _data->can_value->flags;
 }
