@@ -59,6 +59,8 @@ I2C_HandleTypeDef hi2c1;
 
 SPI_HandleTypeDef hspi3;
 
+TIM_HandleTypeDef htim12;
+
 UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
@@ -73,6 +75,7 @@ static void MX_I2C1_Init(void);
 static void MX_SPI3_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_CAN1_Init(void);
+static void MX_TIM12_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -116,6 +119,7 @@ int main(void)
   MX_SPI3_Init();
   MX_USART3_UART_Init();
   MX_CAN1_Init();
+  MX_TIM12_Init();
   /* USER CODE BEGIN 2 */
 	
 
@@ -130,7 +134,11 @@ int main(void)
 
 
 	can_value* can_value_rpm = can_data_get_value(NMOT);
+	//display_fill_rect(0,0,320,240,GREEN);
 
+
+	//HAL_TIM_Base_Start_IT(&htim3);
+	HAL_TIM_Base_Start_IT(&htim12);
 
   /* USER CODE END 2 */
 
@@ -149,7 +157,7 @@ int main(void)
 		
 				
 		can_data_update();
-		display_update_layout(DISPLAY_ID_ALL);
+		//display_update_layout(DISPLAY_ID_ALL);
 		rpm_update(can_value_rpm);
 		
     /* USER CODE END WHILE */
@@ -296,6 +304,7 @@ static void MX_CAN2_Init(void)
   }
   /* USER CODE BEGIN CAN2_Init 2 */
 
+
   /* USER CODE END CAN2_Init 2 */
 
 }
@@ -369,6 +378,44 @@ static void MX_SPI3_Init(void)
   /* USER CODE BEGIN SPI3_Init 2 */
 
   /* USER CODE END SPI3_Init 2 */
+
+}
+
+/**
+  * @brief TIM12 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM12_Init(void)
+{
+
+  /* USER CODE BEGIN TIM12_Init 0 */
+
+  /* USER CODE END TIM12_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+
+  /* USER CODE BEGIN TIM12_Init 1 */
+
+  /* USER CODE END TIM12_Init 1 */
+  htim12.Instance = TIM12;
+  htim12.Init.Prescaler = 15999;
+  htim12.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim12.Init.Period = 200;
+  htim12.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim12.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim12) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim12, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM12_Init 2 */
+
+  /* USER CODE END TIM12_Init 2 */
 
 }
 
@@ -555,7 +602,7 @@ text_renderer_data rp0l2 = {"Tfuel %5.0f \u00f8C",0,2,WHITE,BLACK,GREEN};
 text_renderer_data rp0l3 = {"Pfuel %5.1f bar",0,2,WHITE,BLACK,GREEN};
 
 text_renderer_data rp1l0 = {"fuelcon %3.0f ltr",0,2,WHITE,BLACK,GREEN};
-text_renderer_data rp1l1 = {"ub    %5.1f V",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp1l1 = {"ub    %5.4f V",0,2,WHITE,BLACK,GREEN};
 text_renderer_data rp1l2 = {"aps   %5.0f %%",0,2,WHITE,BLACK,GREEN};
 text_renderer_data rp1l3 = {"ath   %5.0f %%",0,2,WHITE,BLACK,GREEN};
 
@@ -566,7 +613,7 @@ text_renderer_data rp2l3 = {"flc   %5.0f",0,2,WHITE,BLACK,GREEN};
 
 text_renderer_data rp3l0 = {"TC-sw %5.0f",0,2,WHITE,BLACK,GREEN};
 text_renderer_data rp3l1 = {"Pcltch%5.0f bar",0,2,WHITE,BLACK,GREEN};
-text_renderer_data rp3l2 = {"steer %5.0f \u00f8",0,2,WHITE,BLACK,GREEN};
+text_renderer_data rp3l2 = {"steer %4.1f \u00f8",0,2,WHITE,BLACK,GREEN};
 text_renderer_data rp3l3 = {"fanPWM%5.0f %%",0,2,WHITE,BLACK,GREEN};
 
 display_page** generate_right_pages(){
@@ -627,10 +674,10 @@ display_page** generate_right_pages(){
 	
 	display_page* pages = malloc(sizeof(display_page) * number_pages);		
 	if (!pages) Error_Handler();
-	pages[0] = (display_page){5,page0};	
-	pages[1] = (display_page){5,page1};
-	pages[2] = (display_page){5,page2};
-	pages[3] = (display_page){5,page3};
+	pages[0] = (display_page){5,page1};	
+	pages[1] = (display_page){5,page2};
+	pages[2] = (display_page){5,page3};
+	pages[3] = (display_page){5,page0};
 	
 	
 	display_page** ret = malloc(sizeof(void*) * number_pages);

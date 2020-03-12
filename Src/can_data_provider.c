@@ -181,8 +181,9 @@ static void can_data_handle_14(uint8_t* data){
 }
 
 static void can_data_handle_15(uint8_t* data){
+	int16_t* _data = (int16_t*) data;
 	update(ACCY,((float)(((uint16_t)data[1]) << 8 | data[0])) * 0.001f);
-	update(STEER,((float)(((uint16_t)data[3]) << 8 | data[2])) * 0.01f);
+	update(STEER,((float)(_data[1]) )* 0.01f);
 	update(SPEED,((float)(((uint16_t)data[5]) << 8 | data[4])) * 0.01f);
 	update(ACCX,((float)(((uint16_t)data[7]) << 8 | data[6])) * 0.001f);
 }
