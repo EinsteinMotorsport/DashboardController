@@ -284,7 +284,8 @@ void TIM8_BRK_TIM12_IRQHandler(void)
   /* USER CODE END TIM8_BRK_TIM12_IRQn 0 */
   HAL_TIM_IRQHandler(&htim12);
   /* USER CODE BEGIN TIM8_BRK_TIM12_IRQn 1 */
-	display_update_layout(DISPLAY_ID_ALL);
+	timer_interrupt_10ms();
+	//display_update_layout(DISPLAY_ID_ALL);
 
   /* USER CODE END TIM8_BRK_TIM12_IRQn 1 */
 }

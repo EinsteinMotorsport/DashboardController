@@ -40,9 +40,9 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-display_page** generate_left_pages(void);
-display_page** generate_right_pages(void);
-void rpm_update(can_value* data);
+#define DISPLAY_UPDATE_MAX 20
+#define LED_UPDATE_MAX 4
+
 
 /* USER CODE END PD */
 
@@ -65,6 +65,10 @@ UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
 
+unsigned int display_update_count;
+unsigned int led_update_count;
+can_value* can_value_rpm;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -77,6 +81,10 @@ static void MX_USART3_UART_Init(void);
 static void MX_CAN1_Init(void);
 static void MX_TIM12_Init(void);
 /* USER CODE BEGIN PFP */
+
+display_page** generate_left_pages(void);
+display_page** generate_right_pages(void);
+void rpm_update(can_value* data);
 
 /* USER CODE END PFP */
 
@@ -133,7 +141,7 @@ int main(void)
 	display_layout_init(left,right,1,4);
 
 
-	can_value* can_value_rpm = can_data_get_value(NMOT);
+	can_value_rpm = can_data_get_value(NMOT);
 	//display_fill_rect(0,0,320,240,GREEN);
 
 
@@ -141,6 +149,8 @@ int main(void)
 	HAL_TIM_Base_Start_IT(&htim12);
 
   /* USER CODE END 2 */
+ 
+ 
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -158,7 +168,7 @@ int main(void)
 				
 		can_data_update();
 		//display_update_layout(DISPLAY_ID_ALL);
-		rpm_update(can_value_rpm);
+		//rpm_update(can_value_rpm);
 		
     /* USER CODE END WHILE */
 
@@ -399,9 +409,9 @@ static void MX_TIM12_Init(void)
 
   /* USER CODE END TIM12_Init 1 */
   htim12.Instance = TIM12;
-  htim12.Init.Prescaler = 15999;
+  htim12.Init.Prescaler = 159;
   htim12.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim12.Init.Period = 200;
+  htim12.Init.Period = 1000;
   htim12.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim12.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim12) != HAL_OK)
@@ -712,6 +722,14 @@ void rpm_update(can_value* data){
 	}
 }
 
+void timer_interrupt_10ms(){
+	display_update_count++;
+	if (!(display_update_count %= DISPLAY_UPDATE_MAX)) display_update_layout(DISPLAY_ID_ALL);
+	
+	led_update_count++;
+	if (!(led_update_count %= LED_UPDATE_MAX)) rpm_update(can_value_rpm), led_update();	
+	
+}
 
 
 
