@@ -2,6 +2,8 @@
 #include "display_driver.h"
 #include "display_renderer.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "einstein_binary_8.h"
 
 uint8_t text_renderer(uint16_t x,uint16_t y,uint16_t w,uint16_t h, void* data, uint16_t flags){
@@ -23,6 +25,8 @@ uint8_t text_renderer(uint16_t x,uint16_t y,uint16_t w,uint16_t h, void* data, u
 		
 		
 		char tmp[chars*rows + 1];
+		memset(tmp, 0, chars*rows + 1);
+//		for (int i = 0; i< chars*rows +1; i++) tmp[i] = 0;
 		int a = snprintf(tmp,chars*rows + 1,_data->str,_data->can_value->value);
 		//char* tmp = _data->str;
 		for (int j = 0; j<rows;j++){
@@ -57,5 +61,25 @@ uint8_t logo_renderer(uint16_t x, uint16_t y, uint16_t w, uint16_t h, void* data
 	return 0;
 
 }
+
+uint8_t overlay_renderer(uint16_t x, uint16_t y, uint16_t w, uint16_t h, void* data, uint16_t flags){
+	overlay_data* _data = data;
+	if (_data->timeout){ 
+		if(!(--_data->timeout)){
+			_data->flags &= ~1;
+			return _data->handler1(x,y,w,h,_data->data1,flags | 1);
+		}else{
+			uint8_t h_flags = flags;
+			if (!(_data->flags & 1)){
+				_data->flags |= 1;
+				h_flags |= 1;
+			}
+			return _data->handler2(x,y,w,h,_data->data2,h_flags);
+		}
+	}else{
+		return _data->handler1(x,y,w,h,_data->data1,flags);
+	}
+}
+
 
 

@@ -61,7 +61,8 @@ void display_draw_layout(DISPLAY_ID id,int flags){
 			y = curr->regions[i].posy;
 			w = curr->regions[i].width;
 			h = curr->regions[i].height;			
-			uint8_t led = curr->regions[i].handler(x,y,w,h, curr->regions[i].data, flags);
+			uint8_t led_flags = curr->regions[i].handler(x,y,w,h, curr->regions[i].data, flags);
+			led_set(curr->regions[i].led_id, led_flags);
 		}
 	}
 	if (id & DISPLAY_ID_RIGHT){

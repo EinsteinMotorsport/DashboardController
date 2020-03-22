@@ -56,6 +56,8 @@ void Error_Handler(void);
 /* USER CODE BEGIN EFP */
 
 void timer_interrupt_10ms(void);
+void log_to_serial(char*);
+void log_to_display(char*);
 
 /* USER CODE END EFP */
 

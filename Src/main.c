@@ -29,6 +29,8 @@
 #include "display_renderer.h"
 #include "led_driver.h"
 #include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 
 /* USER CODE END Includes */
 
@@ -69,6 +71,8 @@ unsigned int display_update_count;
 unsigned int led_update_count;
 can_value* can_value_rpm;
 
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -85,6 +89,8 @@ static void MX_TIM12_Init(void);
 display_page** generate_left_pages(void);
 display_page** generate_right_pages(void);
 void rpm_update(can_value* data);
+void display_error(char* err);
+
 
 /* USER CODE END PFP */
 
@@ -157,11 +163,25 @@ int main(void)
 	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9);
 	
 	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_9,GPIO_PIN_RESET);
+	
+	//char str_test[256] = {0};
+	
+	//snprintf(str_test,256,"%s",error_str);
+	
+	
+	//uint8_t* error_str = (uint8_t*)"test_error\n";
+	//HAL_UART_Transmit(&huart3,error_str, 11,HAL_MAX_DELAY);
+	//display_error(error_str);
+
+	
 	//unsigned int i = 0;
-  while (1){
-		/*if (i++>100000 && 0) {
+	log_to_serial("entering main loop\n");
+	//log_to_display("entering main loop\n");
+	while (1){
+		/*if (i++>10000) {
 			i=0;
-			display_layout_next_page(DISPLAY_ID_RIGHT);
+			display_error("test error");
+			//display_layout_next_page(DISPLAY_ID_RIGHT);
 		}*/
 		//HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_5);
 		
@@ -565,11 +585,13 @@ static void MX_GPIO_Init(void)
 
 
 
-text_renderer_data test_5 = {"%04.0f",0,5,WHITE,BLACK,GREEN};
-text_renderer_data test_6 = {"TMOT%3.0f",0,3,WHITE,BLACK,GREEN};
-text_renderer_data test_7 = {"TOIL%3.0f",0,3,WHITE,BLACK,GREEN};
-text_renderer_data test_8 = {"POIL%3.0f",0,3,WHITE,BLACK,GREEN};
+text_renderer_data test_5 = {"%04.0f",0,2,WHITE,BLACK,GREEN};
+text_renderer_data test_6 = {"TMOT%3.0f",0,2,WHITE,BLACK,GREEN};
+text_renderer_data test_7 = {"TOIL%3.0f",0,2,WHITE,BLACK,GREEN};
+text_renderer_data test_8 = {"POIL%3.0f",0,2,WHITE,BLACK,GREEN};
 text_renderer_data test_9 = {"%1.0f",0,10,WHITE,BLACK,GREEN};
+text_renderer_data test_10 = {0,0,1,WHITE,RED,GREEN};
+overlay_data test_o_1 = {&test_5,&test_10,text_renderer,text_renderer,0,0};
 color_fill_data test_0 = {PINK,   BLUE};
 color_fill_data test_1 = {CYAN,   BLUE};
 color_fill_data test_2 = {YELLOW, BLUE};
@@ -583,13 +605,14 @@ display_page** generate_left_pages(){
 	test_7.can_value = can_data_get_value(TOIL);
 	test_8.can_value = can_data_get_value(POIL);
 	test_9.can_value = can_data_get_value(GEAR);
+	test_10.can_value = can_data_get_value(NO_VALUE);
 	
 	const int number_pages = 1;
 	
 	display_region* page0 = malloc(sizeof(display_region) * 7);
 	if(!page0) Error_Handler();
 	page0[0] = (display_region){&test_4,0,0,320,240,color_fill_renderer,0};
-	page0[1] = (display_region){&test_5, 0, 0, 200, 80, text_renderer,LEFT_SIDE_LED_0};
+	page0[1] = (display_region){&test_o_1, 0, 0, 200, 80, overlay_renderer,LEFT_SIDE_LED_0};
 	page0[2] = (display_region){&test_6, 5, 240 - 3*3*16 - 10, 7*3*10, 3*16, text_renderer,LEFT_SIDE_LED_1};
 	page0[3] = (display_region){&test_7, 5, 240 - 2*3*16 - 5, 7*3*10, 3*16, text_renderer,LEFT_SIDE_LED_2};
 	page0[4] = (display_region){&test_8, 5, 240 - 1*3*16, 7*3*10, 3*16, text_renderer,LEFT_SIDE_LED_3};
@@ -730,6 +753,21 @@ void timer_interrupt_10ms(){
 	if (!(led_update_count %= LED_UPDATE_MAX)) rpm_update(can_value_rpm), led_update();	
 	
 }
+
+void display_error(char* err){
+	if (err){
+		test_o_1.timeout = (5 * 100)/DISPLAY_UPDATE_MAX;
+		test_10.str = err;
+	}
+}
+void log_to_serial(char* str){
+	HAL_UART_Transmit(&huart3,(uint8_t*)str,strlen(str),HAL_MAX_DELAY);
+}
+
+void log_to_display(char* str){
+	display_error(str);
+}
+
 
 
 
