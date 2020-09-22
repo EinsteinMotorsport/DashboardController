@@ -43,7 +43,7 @@
 /* USER CODE BEGIN PD */
 
 #define DISPLAY_UPDATE_MAX 20
-#define LED_UPDATE_MAX 4
+#define LED_UPDATE_MAX 10
 
 
 /* USER CODE END PD */
@@ -61,7 +61,9 @@ I2C_HandleTypeDef hi2c1;
 
 SPI_HandleTypeDef hspi3;
 
+TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim12;
+DMA_HandleTypeDef hdma_tim3_ch3;
 
 UART_HandleTypeDef huart3;
 
@@ -84,6 +86,8 @@ static void MX_SPI3_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_CAN1_Init(void);
 static void MX_TIM12_Init(void);
+static void MX_DMA_Init(void);
+static void MX_TIM3_Init(void);
 /* USER CODE BEGIN PFP */
 
 display_page** generate_left_pages(void);
@@ -134,6 +138,8 @@ int main(void)
   MX_USART3_UART_Init();
   MX_CAN1_Init();
   MX_TIM12_Init();
+  MX_DMA_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 	
 
@@ -155,8 +161,6 @@ int main(void)
 	HAL_TIM_Base_Start_IT(&htim12);
 
   /* USER CODE END 2 */
- 
- 
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -176,7 +180,47 @@ int main(void)
 	
 	//unsigned int i = 0;
 	log_to_serial("entering main loop\n");
+	
+	//led_set(0xfffff00f, LED_ON | LED_UPDATE);
+	led_set(0xFFFFFFFF, LED_ON | LED_UPDATE);
+	HAL_Delay(2000);
+	led_set(0xFFFFFFFF, LED_ON | LED_UPDATE | LED_BLINKING | 0x80);
 	//log_to_display("entering main loop\n");
+	
+	HAL_Delay(3000);
+	/*
+	led_set_rgb(RGB_LED_0 | RGB_LED_1 | RGB_LED_2 | RGB_LED_3, LED_ON | LED_UPDATE, LED_RED);
+	HAL_Delay(2000);
+	led_set_rgb(RGB_LED_0 | RGB_LED_1 | RGB_LED_2 | RGB_LED_3, LED_ON | LED_UPDATE, LED_GREEN);
+	HAL_Delay(2000);
+	led_set_rgb(RGB_LED_0 | RGB_LED_1 | RGB_LED_2 | RGB_LED_3, LED_ON | LED_UPDATE, LED_BLUE);
+	HAL_Delay(2000);
+	led_set_rgb(RGB_LED_0 | RGB_LED_1 | RGB_LED_2 | RGB_LED_3, LED_ON | LED_UPDATE, LED_CYAN);
+	HAL_Delay(2000);
+	led_set_rgb(RGB_LED_0 | RGB_LED_1 | RGB_LED_2 | RGB_LED_3, LED_ON | LED_UPDATE, LED_YELLOW);
+	HAL_Delay(2000);
+	led_set_rgb(RGB_LED_0 | RGB_LED_1 | RGB_LED_2 | RGB_LED_3, LED_ON | LED_UPDATE, LED_PINK);
+	HAL_Delay(2000);
+	led_set_rgb(RGB_LED_0 | RGB_LED_1 | RGB_LED_2 | RGB_LED_3, LED_ON | LED_UPDATE, LED_WHITE);
+	HAL_Delay(2000);
+	*/
+	led_set(0xffffffff, LED_OFF | LED_UPDATE);
+	
+	
+	
+	/*uint32_t frq[] = {1465, 1465};
+
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_SET);
+  HAL_TIM_PWM_Start_DMA(&htim3,TIM_CHANNEL_3, frq, 1);
+	*/
+	while(1) {
+		HAL_Delay(1);
+		GPIOC->BSRR = 0x00000100;
+		HAL_Delay(1);
+ 		GPIOC->BSRR = 0x01000000;
+	}		
+	
+	
 	while (1){
 		/*if (i++>10000) {
 			i=0;
@@ -185,7 +229,12 @@ int main(void)
 		}*/
 		//HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_5);
 		
-				
+		//GPIOA->BSRR = (0xffff);
+//	GPIOC->BSRR = ((~gpioc_leds << 16) & 0x0F00) | gpioc_leds;
+//	GPIOE->BSRR = ((~gpioe_leds << 16) & 0x0F00) | gpioe_leds;
+		//HAL_Delay(50);
+		//GPIOA->BSRR = 0xffff0000;
+		//HAL_Delay(50);
 		can_data_update();
 		//display_update_layout(DISPLAY_ID_ALL);
 		//rpm_update(can_value_rpm);
@@ -412,6 +461,55 @@ static void MX_SPI3_Init(void)
 }
 
 /**
+  * @brief TIM3 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM3_Init(void)
+{
+
+  /* USER CODE BEGIN TIM3_Init 0 */
+
+  /* USER CODE END TIM3_Init 0 */
+
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+
+  /* USER CODE BEGIN TIM3_Init 1 */
+
+  /* USER CODE END TIM3_Init 1 */
+  htim3.Instance = TIM3;
+  htim3.Init.Prescaler = 0;
+  htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim3.Init.Period = 2929;
+  htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 1464;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM3_Init 2 */
+
+  /* USER CODE END TIM3_Init 2 */
+  HAL_TIM_MspPostInit(&htim3);
+
+}
+
+/**
   * @brief TIM12 Initialization Function
   * @param None
   * @retval None
@@ -482,6 +580,22 @@ static void MX_USART3_UART_Init(void)
 
 }
 
+/** 
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void) 
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA1_Stream7_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream7_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream7_IRQn);
+
+}
+
 /**
   * @brief GPIO Initialization Function
   * @param None
@@ -506,7 +620,8 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, RGBLED0G_Pin|RGBLED1G_Pin|RGBLED2G_Pin|RGBLED3G_Pin 
-                          |RGBLED0B_Pin|RGBLED1B_Pin|RGBLED2B_Pin|RGBLED3B_Pin, GPIO_PIN_RESET);
+                          |RGBLED0B_Pin|RGBLED1B_Pin|RGBLED2B_Pin|RGBLED3B_Pin 
+                          |GPIO_PIN_8, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, RGBLED0R_Pin|RGBLED1R_Pin|TopLED2_Pin|TopLED3_Pin 
@@ -534,9 +649,11 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
   /*Configure GPIO pins : RGBLED0G_Pin RGBLED1G_Pin RGBLED2G_Pin RGBLED3G_Pin 
-                           RGBLED0B_Pin RGBLED1B_Pin RGBLED2B_Pin RGBLED3B_Pin */
+                           RGBLED0B_Pin RGBLED1B_Pin RGBLED2B_Pin RGBLED3B_Pin 
+                           PC8 */
   GPIO_InitStruct.Pin = RGBLED0G_Pin|RGBLED1G_Pin|RGBLED2G_Pin|RGBLED3G_Pin 
-                          |RGBLED0B_Pin|RGBLED1B_Pin|RGBLED2B_Pin|RGBLED3B_Pin;
+                          |RGBLED0B_Pin|RGBLED1B_Pin|RGBLED2B_Pin|RGBLED3B_Pin 
+                          |GPIO_PIN_8;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -750,8 +867,10 @@ void timer_interrupt_10ms(){
 	if (!(display_update_count %= DISPLAY_UPDATE_MAX)) display_update_layout(DISPLAY_ID_ALL);
 	
 	led_update_count++;
-	if (!(led_update_count %= LED_UPDATE_MAX)) rpm_update(can_value_rpm), led_update();	
-	
+	if (!(led_update_count %= LED_UPDATE_MAX)) {
+		rpm_update(can_value_rpm);
+		led_update();	
+	}
 }
 
 void display_error(char* err){

@@ -28,8 +28,9 @@ void led_update(void){
 		blink_counter = 0;
 		blinking_on = !blinking_on;
 	}
-
 	uint32_t output = led_status & (blinking_on ? ~led_blinking : ~0);	
+
+//	uint32_t output = led_status;	
 	
 	#ifdef TIMEOUT_ENABLE
 	if (!blink_counter){ 
@@ -39,12 +40,12 @@ void led_update(void){
 	}
 	#endif
 
-	uint32_t gpioa_leds = output & 0x00FF;
-	uint32_t gpioc_leds = output & 0xF000 >> 24;
-	uint32_t gpioe_leds = output & 0x0F00 >> 16; 
-	GPIOA->BSRR = ((~gpioa_leds << 16) & 0xFF00) | gpioa_leds;
-	GPIOC->BSRR = ((~gpioc_leds << 16) & 0x0F00) | gpioc_leds;
-	GPIOE->BSRR = ((~gpioe_leds << 16) & 0x0F00) | gpioe_leds;
+	uint32_t gpioa_leds = output & 0x0000FFFF;
+	uint32_t gpioc_leds = (output & 0xFF000000) >> 24;
+	uint32_t gpioe_leds = (output & 0x00FF0000) >> 16; 
+	GPIOA->BSRR =  ((~gpioa_leds << 16) & 0xFFFF0000) | gpioa_leds;
+	GPIOC->BSRR =  ((~gpioc_leds << 16) & 0x00FF0000) | gpioc_leds;
+	GPIOE->BSRR = (((~gpioe_leds << 16) & 0x00FF0000) | gpioe_leds) & 0x00FF00FF;
 }
 
 void led_set(uint32_t id, uint8_t flags){

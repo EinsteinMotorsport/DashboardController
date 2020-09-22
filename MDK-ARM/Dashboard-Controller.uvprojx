@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F407xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;                          ../Drivers/STM32F4xx_HAL_Driver/Inc;                          ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;                          ../Drivers/CMSIS/Device/ST/STM32F4xx/Include;                          ../Drivers/CMSIS/Include</IncludePath>
+              <IncludePath>../Inc;                                ../Drivers/STM32F4xx_HAL_Driver/Inc;                                ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;                                ../Drivers/CMSIS/Device/ST/STM32F4xx/Include;                                ../Drivers/CMSIS/Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -546,6 +546,36 @@
               <FileName>system_stm32f4xx.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/system_stm32f4xx.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Inc</GroupName>
+          <Files>
+            <File>
+              <FileName>can_data_provider.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\can_data_provider.h</FilePath>
+            </File>
+            <File>
+              <FileName>display_driver.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\display_driver.h</FilePath>
+            </File>
+            <File>
+              <FileName>display_layout.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\display_layout.h</FilePath>
+            </File>
+            <File>
+              <FileName>display_renderer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\display_renderer.h</FilePath>
+            </File>
+            <File>
+              <FileName>led_driver.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\led_driver.h</FilePath>
             </File>
           </Files>
         </Group>
